@@ -17,8 +17,8 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('email', 120)->unique();
+            $table->string('password', 255);
             $table->timestamp('email_verified_at')->nullable();
-            $table->string('senha', 20);
             $table->enum("dois_fatoes", ["Y", "N"]);
             $table->rememberToken();
             $table->foreignId('current_team_id')->nullable();
