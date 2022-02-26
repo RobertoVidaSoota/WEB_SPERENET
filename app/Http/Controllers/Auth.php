@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Endereco;
+use App\Models\InfoPessoais;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
@@ -61,9 +63,41 @@ class AuthApi extends Controller
 
 
 
-
+    // CADASTRO DO USUARIO
     public function resgisterUser(Request $req)
     {
-        
+        $user = [ $req->email, $req->senha];
+
+        $info_pessoais = [ 
+            $req->nome_usuario, 
+            $req->telefone, 
+            $req->cpf, 
+            $req->nascimento,
+            $req->fk_id_usuario];
+
+        $endereco = [ 
+            $req->cep,
+            $req->pais,
+            $req->uf,
+            $req->cidade,
+            $req->bairro,
+            $req->rua,
+            $req->numero,
+            $req->fk_id_usuario,
+        ];
+
+
+        $user = User::create($user);
+        $endereco = Endereco::create($endereco);
+        $info_pessoais = InfoPessoais::create($info_pessoais);
+
+        if($user && $endereco && $info_pessoais)
+        {
+            return response()->json(["msg" => "Cadastro realizado"]);
+        }
+        else
+        {
+            return response()->json(["msg" => "Erro ao Cadastrar"]);
+        }
     }
 }

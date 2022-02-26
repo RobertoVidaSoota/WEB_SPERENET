@@ -19,9 +19,9 @@ use App\Http\Controllers\
 */
 
 // AUTENTICAÇÃO
-Route::post("/get_user_auth", [AuthApi::class, "loginUser"]);
+Route::post("/post_login_user", [AuthApi::class, "loginUser"]);
 
-
+Route::post(";post_register_user", [AuthApi::class, "registerUser"]);
 
 
 
