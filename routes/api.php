@@ -18,13 +18,20 @@ use App\Http\Controllers\
 |
 */
 
+// AUTENTICAÇÃO
+Route::post("/get_user_auth", [AuthApi::class, "loginUser"]);
 
 
 
 
-Route::group(["middleware" => "auth:api"], function () {
 
-    // AUTENTICAÇÃO
-    Route::get("/get_user_auth", [AuthApi::class, "loginUser"]);
 
-});
+
+
+
+
+// Route::group(["middleware" => "auth:api"], function () {
+
+    
+
+// });
