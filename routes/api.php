@@ -4,7 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\
 {
-    Auth
+    AuthApi
 };
 
 /*
@@ -18,16 +18,13 @@ use App\Http\Controllers\
 |
 */
 
-// Route::get('/teste', function () {
-//     return response()->json(["eu" => "22"]);
-// });
 
-Route::get("/get_user_auth", [Auth::class, "index"]);
+
+
 
 Route::group(["middleware" => "auth:api"], function () {
 
-    Route::get('/user', function (Request $request) {
-        return $request->user();
-    });
+    // AUTENTICAÇÃO
+    Route::get("/get_user_auth", [AuthApi::class, "loginUser"]);
 
 });
