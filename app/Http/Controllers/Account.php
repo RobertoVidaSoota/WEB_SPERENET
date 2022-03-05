@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Endereco;
 use App\Models\InfoPessoais;
+use App\Models\Notificacoes;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -39,7 +40,7 @@ class Account extends Controller
             $req->telefone, 
             $req->cpf, 
             $req->nascimento,
-            $req->$id_user
+            $id_user
         ];
 
         $reqEndereco = [ 
@@ -50,17 +51,16 @@ class Account extends Controller
             $req->bairro,
             $req->rua,
             $req->numero,
-            $req->$id_user,
+            $id_user,
         ];
 
-        $user = User::findOrFail($id_user);
-        $endereco = Endereco::findOrFail($reqEndereco[$req->$id_user]);
-        $info_pessoais = InfoPessoais::findOrFail($reqInfo_pessoais[$req->$id_user]);
+        $endereco = Endereco::findOrFail($id_user);
+        $info_pessoais = InfoPessoais::findOrFail($id_user);
 
         $endereco->update($reqEndereco);
         $info_pessoais->update($reqInfo_pessoais);
 
-        if($user and $endereco and $info_pessoais)
+        if($endereco and $info_pessoais)
         {
             return response()->json([
                 "msg" => "Alteração feita com sucesso."
@@ -153,6 +153,38 @@ class Account extends Controller
         {
             return response()->json([
                 "msg" => "Erro na ativação na chave de dois fatores."
+            ]);
+        }
+    }
+
+
+
+
+    // ALTERA PREFERÊNCIAS DE NOTIFICAÇÃO
+    public function changeUserNotification(Request $req)
+    {
+        $id_user = $req->id_user;
+
+        $reqNotifications = [
+            $req->promocoes,
+            $req->novidades,
+            $req->atualizacoes,
+            $req->pedidos,
+        ];
+
+        $notifications = Notificacoes::findOrFail($id_user);
+        $notifications->update($reqNotifications);
+
+        if($notifications)
+        {
+            return response()->json([
+                "msg" => "Alteração feita com sucesso."
+            ]);
+        }
+        else
+        {
+            return response()->json([
+                "msg" => "Erro para fazer a alteração."
             ]);
         }
     }

@@ -42,6 +42,10 @@ Route::post("/post_confirm_email_twofa", [
     Account::class, "confirmEmailTwoFA"
 ]);
 
+Route::post("/post_change_user_notification", [
+    Account::class, "changeUserNotification"
+]);
+
 
 
 
