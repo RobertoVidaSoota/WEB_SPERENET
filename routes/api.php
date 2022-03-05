@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\
 {
+    Account,
     AuthApi
 };
 
@@ -27,7 +28,9 @@ Route::post("/post_new_password", [AuthApi::class, "newPassword"]);
 
 
 // CONTA
-Route::get("/get_info_account", [Account::class, "infoAccount"]);
+Route::get("/get_info_account", [Account::class, "getInfoAccount"]);
+
+Route::post("/post_change_password", [Account::class, "changePassword"]);
 
 
 
