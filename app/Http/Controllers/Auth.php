@@ -2,30 +2,26 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\NovaSenha;
 use App\Models\Endereco;
 use App\Models\InfoPessoais;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 
 class AuthApi extends Controller
 {
+    // -------------- SUMÁRIO -------------- \\
+
+    // LOGIN DO USUÁRIO
+    // CADASTRO DO USUARIO
+    // RECUPERAR SENHA
 
     // public function __construct()
     // {   
     //     $this->middleware('auth:api');
-    // }
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    // public function index()
-    // {
-    //     $users = User::get();
-
-    //     return response()->json($users);
     // }
 
 
@@ -98,6 +94,32 @@ class AuthApi extends Controller
         else
         {
             return response()->json(["msg" => "Erro ao Cadastrar"]);
+        }
+    }
+
+
+
+
+    // RECUPERAR SENHA
+    public function newPassword(Request $req)
+    {
+        $email = $req->email;
+        $text = "
+            Clique no link abaixo para definir a nova senha. <br><br>
+            <a href='#'>Mudar senha</a>
+        ";
+
+        $enviar = Mail::to($email)->send(new NovaSenha);
+
+        if($enviar)
+        {
+            return response()->json(
+                ["msg" => "Email de recuperação enviado com sucesso."]
+            );
+        }
+        else
+        {
+            return response()->json(["msg" => "Erro ao enviar o e-mail"]);
         }
     }
 }
