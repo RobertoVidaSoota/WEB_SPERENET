@@ -104,10 +104,6 @@ class AuthApi extends Controller
     public function newPassword(Request $req)
     {
         $email = $req->email;
-        $text = "
-            Clique no link abaixo para definir a nova senha. <br><br>
-            <a href='#'>Mudar senha</a>
-        ";
 
         $enviar = Mail::to($email)->send(new NovaSenha);
 
