@@ -15,7 +15,7 @@ class Account extends Controller
     // ALTERAR INFORMAÇÕES GERAIS
     // ALTERAR E-MAIL
     // ALTERAR SENHA
-    // CONFIRMAR E-MAIL
+    // CONFIRMAR DOIS FATORES POR E-MAIL
     // ALTERA PREFERÊNCIAS DE NOTIFICAÇÃO
     
 
@@ -123,6 +123,36 @@ class Account extends Controller
         {
             return response()->json([
                 "msg" => "Erro para alterar a senha."
+            ]);
+        }
+    }
+
+
+
+
+    // CONFIRMAR DOIS FATORES POR E-MAIL
+    public function confirmEmailTwoFA(Request $req)
+    {
+        $device = $req->device;
+        $id = $req->id;
+        $two_factor_secret = password_hash($device.$id, "12");
+
+        $user = User::findOrFail($id);
+        $user->update([
+            "two_factor_secret" => $two_factor_secret,
+            "dois_fatores" => 'Y'
+        ]);
+
+        if($user)
+        {
+            return response()->json([
+                "msg" => "Chave de dois fatores foi ativada."
+            ]);
+        }
+        else
+        {
+            return response()->json([
+                "msg" => "Erro na ativação na chave de dois fatores."
             ]);
         }
     }

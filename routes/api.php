@@ -38,6 +38,10 @@ Route::post("/post_change_email", [Account::class, "changeEmail"]);
 
 Route::post("/post_change_password", [Account::class, "changePassword"]);
 
+Route::post("/post_confirm_email_twofa", [
+    Account::class, "confirmEmailTwoFA"
+]);
+
 
 
 
