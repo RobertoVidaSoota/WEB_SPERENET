@@ -5,7 +5,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\
 {
     Account,
-    AuthApi
+    AuthApi,
+    Shop
 };
 
 /*
@@ -18,6 +19,10 @@ use App\Http\Controllers\
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+
+// Route::group(["middleware" => "auth:api"], function () {
+// });
+
 
 
 
@@ -56,58 +61,31 @@ Route::post("/post_change_user_notification", [
 
 
 // NOVOS PRODUTOS
-/* 
-    SELECT * FROM produtos ORDER BY id DESC LIMIT 10
-*/
+Route::get("/get_new_products", [
+    Shop::class, "getNewProducts"
+]);
 
 // PRODUTOS POPULARES
-/* 
-    SELECT * FROM produtos 
-    INNER JOIN comentarios ON 
-    comentarios.fk_id_produtos = produtos.id LIMIT 3
-
-    SELECT COUNT(estrelas) FROM comentarios WHERE 
-    fk_id_produto = $id
-*/
+Route::get("/post_pop_products", [
+    Shop::class, "postPopProducts"
+]);
 
 // PESQUISAR
-/*
-    SELECT * FROM produtos WHERE nome_produto LIKE
-    '%texto%' LIMIT 20
-*/
+Route::post("/post_search", [
+    Shop::class, "postSearch"
+]);
 
 // LISTAR DESEJOS
-/*
-    SELECT * FROM usuario_desejos 
-    INNER JOIN usuario 
-    INNER JOIN produto
-    ON usuario_desejos.fk_id_usuario = $user_id
-    ON usuario_desejos.fk_id_produto = produto.id
-
-    SELECT AVG(estrelas) FROM comentarios WHERE 
-    fk_id_produto = $id
-*/
+Route::post("/post_wishlist", [
+    Shop::class, "postWishlist"
+]);
 
 // PÁGINA DO PRODUTO
-/*
-    SELECT * FROM produtos WHERE produtos.id = $produto_id
-
-    SELECT * FROM especificacoes WHERE 
-    especificacoes.fk_id_produto = $produto_id
-
-    SELECT * FROM comentarios
-    INNER JOIN produtos 
-    INNER JOIN users
-    ON comentarios.fk_id_produtos = $produtos_id
-    ON comentarios.fk_id_users = users.id
-*/
+Route::post("/post_page_product", [
+    Shop::class, "postPageProduct"
+]);
 
 
 
 
 
-// Route::group(["middleware" => "auth:api"], function () {
-
-    
-
-// });
