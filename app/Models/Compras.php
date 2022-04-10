@@ -10,6 +10,7 @@ class Compras extends Model
     use HasFactory;
 
     protected $table = "compras";
+    // COLOCAR OS FILLABLES NO MODEL CARRINHO
     protected $fillable = [
         "metodo_pagamento",
         "link_boleto",

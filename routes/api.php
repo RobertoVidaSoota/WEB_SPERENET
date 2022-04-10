@@ -6,6 +6,7 @@ use App\Http\Controllers\
 {
     Account,
     AuthApi,
+    Checkout,
     Shop
 };
 
@@ -27,6 +28,8 @@ use App\Http\Controllers\
 
 
 // ---------------- AUTENTICAÇÃO ----------------
+
+
 Route::post("/post_login_user", [AuthApi::class, "loginUser"]);
 
 Route::post("/post_register_user", [AuthApi::class, "registerUser"]);
@@ -36,6 +39,8 @@ Route::post("/post_new_password", [AuthApi::class, "newPassword"]);
 
 
 // ---------------- CONTA ----------------
+
+
 Route::get("/get_info_account", [Account::class, "getInfoAccount"]);
 
 Route::post("/post_change_info_account", [
@@ -87,5 +92,25 @@ Route::post("/post_page_product", [
 
 
 
+// ---------------- PAGAMENTO ----------------
 
 
+// CARINHO DE COMPRA(TRAVADO)
+Route::post("post_cart", [
+    Checkout::class, "postCart"
+]);
+
+// MÉTODO DE PAGAMENTO
+Route::post("post_pay_method", [
+    Checkout::class, "postPayMethod"
+]);
+
+// FORMULÁRIO DE PAGAMENTO (PROVISORIO)
+Route::post("post_payment", [
+    Checkout::class, "postPayment"
+]);
+
+// REASTREAMENTO DE PRODUTO
+Route::post("post_payment", [
+    Checkout::class, "postPayment"
+]);
