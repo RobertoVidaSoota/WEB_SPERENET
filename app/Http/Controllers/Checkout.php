@@ -31,7 +31,7 @@ class Checkout extends Controller
         return $this->_configs->getAccountCredentials();
     }
 
-
+    // FINALIZAR PAGAMENTO (NO CALL)
     public function finalPayment(Request $req)
     {
         $idPedido = rand(2, 999);
@@ -95,7 +95,7 @@ class Checkout extends Controller
     }
     
 
-    // FORMULÁRIO DE PAGAMENTO (PROVISORIO)
+    // FORMULÁRIO DE PAGAMENTO (NO CALL)
     public function postPayment(Request $req)
     {
         $data = [];
@@ -104,11 +104,31 @@ class Checkout extends Controller
         );
         $IDSession = $sessionCode->getResult();
         $data["sessionID"] = $IDSession;
+
+        return response()->json([
+            "pag_id" => $data
+        ]);
+    }
+
+
+    //PEGAR DADOS DO CARTÃO
+    public function pegarDadosCartao()
+    {
+
+    }
+
+
+    //CONFIRMAR PAGAMENTO
+    public function confirmarPagamento()
+    {
+
     }
 
 
 
+    // -----------------------------------
     // CARINHO DE COMPRA(TRAVADO)
+    // -----------------------------------
     public function postCart(Request $req)
     {
         $user_id = $req->user_id;

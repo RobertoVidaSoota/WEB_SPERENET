@@ -1,0 +1,89 @@
+<script type="text/javascript" src="https://stc.sandbox.pagseguro.uol.com.br/pagseguro/api/v2/checkout/pagseguro.directpayment.js"></script>
+<script>
+
+    PagSeguroDirectPayment.setSessionId(this.pag_id.sessionID)
+
+
+    function pegarDadosCartao()
+    {
+        // PEGAR O HASH DO CARTAO
+        document.querySelector(".numero_cartao").
+        addEventListener("blur", function(){
+        PagSeguroDirectPayment.onSenderHashReady(function(res){
+            if(res.status === "error")
+            {
+                // console.log(res.message)
+                return false;
+            }
+                var hash = res.senderHash
+                document.querySelector(".hashseller").value = hash;
+            })
+
+            // PEGAR BANDEIRA DO CARTÃO
+            let numeroCartao = document.querySelector(".numero_cartao").value
+            document.querySelector(".bandeira").value = "";
+                if(numeroCartao.length > 6)
+                {
+                    let prefixoCartao = numeroCartao.substr(0, 6);
+                    PagSeguroDirectPayment.getBrand({
+                    cardBin: prefixoCartao,
+                    success: function(res)
+                {
+                    document.querySelector(".bandeira").value = res.brand.name;
+                },
+                    error: function(res)
+                {
+                    console.log("Número do cartão é inválido");
+                }
+                    })
+                }else
+                {
+                    document.querySelector(".bandeira").value = "";
+                }
+        })
+    }
+
+
+
+    function confirmarPagamento()
+    {
+        // RECUPERAR TOKEN DA TRANSAÇÃO
+        document.querySelector(".pagar").
+        addEventListener("click", function(){
+        var numeroCartao = document.querySelector(".numero_cartao").value;
+        var inicioCartao = numeroCartao.substr(0, 6);
+        var cvv = document.querySelector(".cvv").value;
+        var anoexp = document.querySelector(".ano_exp").value;
+        var mesexp = document.querySelector(".mes_exp").value;
+        var hashseller = document.querySelector(".hashseller").value;
+        var bandeiraCartao = document.querySelector(".bandeira").value;
+            PagSeguroDirectPayment.createCardToken({
+                cardNumber: numeroCartao,
+                brand: bandeiraCartao,
+                cvv: cvv,
+                expirationMonth: mesexp,
+                expirationYear: anoexp,
+                success: function(res)
+                {
+                // CONFIRMAR TRANSAÇÃO
+                axios.post("http://127.0.0.1:8000/api/finalizar", {
+                    hashseller: hashseller,
+                    cardtoken: res.card.token,
+                    valorinicio: document.querySelector(".valor_total").value,
+                    numeroparcela: document.querySelector(".numero_parcelas").value,
+                    totalpagar: document.querySelector(".total_pagar").value,
+                    totalparcela: document.querySelector(".valor_parcela").value,
+                }).then((res) => {
+                    // console.log(res)
+                });
+                },
+                error: function(res)
+                {
+                // console.log("Impossível recuperar o token do cartão, dados incorretos");
+                // console.log(res)
+                }
+            });
+        });
+    }
+    
+</script>
