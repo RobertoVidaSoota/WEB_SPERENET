@@ -44,14 +44,14 @@ class Checkout extends Controller
             $idPedido,
             'blusa',
             1,
-            number_format($req->valorinicio, 2, ".", "")
+            number_format($req->total, 2, ".", "")
         );
 
-        $user = $req->user_name::user(); 
+        // $user = $req->user_name::user(); 
 
-        $credCard->setSender()->setName($user->name. " ". $user->name);
-        $credCard->setSender()->setEmail("xerecard@sandbox.pagseguro.com.br");
-        $credCard->setSender()->setHash($req->hashseller);
+        $credCard->setSender()->setName("Roberto". " ". "Carlos");
+        $credCard->setSender()->setEmail("c83753159429751800023@sandbox.pagseguro.com.br");
+        $credCard->setSender()->setHash($req->hash);
         $credCard->setSender()->setPhone()->withParameters(71, 87728789);
         $credCard->setSender()->setDocument()->withParameters("CPF", "11111111111");
 
@@ -75,14 +75,14 @@ class Checkout extends Controller
             'BRA',
             'terreo'
         );
-        $credCard->setToken($req->cardtoken);
+        $credCard->setToken($req->token);
         $credCard->setInstallment()->withParameters(
             $req->numeroparcela,
             $req->totalparcela,
             2
         );
 
-        $credCard->setHolder()->setName($user->name. " ". $user->name);
+        $credCard->setHolder()->setName("Roberto". " ". "Carlos");
         $credCard->setHolder()->setDocument()->withParameters("CPF", "11111111111");
         $credCard->setHolder()->setBirthDate("03/01/1990");
         $credCard->setHolder()->setPhone()->withParameters(71, 87728789);

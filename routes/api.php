@@ -96,21 +96,21 @@ Route::post("/post_page_product", [
 
 
 // CARINHO DE COMPRA(TRAVADO)
-Route::post("post_cart", [
+Route::post("/post_cart", [
     Checkout::class, "postCart"
 ]);
 
 // MÉTODO DE PAGAMENTO
-Route::post("post_pay_method", [
+Route::post("/post_pay_method", [
     Checkout::class, "postPayMethod"
 ]);
 
-// FORMULÁRIO DE PAGAMENTO (PROVISORIO)
-Route::post("post_payment", [
-    Checkout::class, "postPayment"
+// CONFIRMAR PAGAMENTO
+Route::post("/post_final_payment", [
+    Checkout::class, "finalPayment"
 ]);
 
 // REASTREAMENTO DE PRODUTO
-Route::post("post_payment", [
+Route::post("/post_payment", [
     Checkout::class, "postPayment"
 ]);
