@@ -31,6 +31,22 @@ class Checkout extends Controller
         return $this->_configs->getAccountCredentials();
     }
 
+
+    public function getSessionPagseguro(Request $req)
+    {
+        $data = [];
+        $sessionCode = \PagSeguro\Services\Session::create(
+            $this->getCrt()
+        );
+        $IDSession = $sessionCode->getResult();
+        $data["sessionID"] = $IDSession;
+
+        return response()->json([
+            "pag_id" => $data
+        ]);
+    }
+
+
     // FINALIZAR PAGAMENTO (NO CALL)
     public function finalPayment(Request $req)
     {
@@ -41,16 +57,17 @@ class Checkout extends Controller
         $credCard->setCurrency("BRL");
 
         $credCard->addItems()->withParameters(
-            $idPedido,
-            'blusa',
-            1,
+            $idPedido.$req->items,
+            $req->items, // <--- NOME DO PEDIDO
+            1,  // <--- COPIAS
+            // VALOR DE CADA PRODUTO NO CARRINHO
             number_format($req->total, 2, ".", "")
         );
 
         // $user = $req->user_name::user(); 
 
         $credCard->setSender()->setName("Roberto". " ". "Carlos");
-        $credCard->setSender()->setEmail("c83753159429751800023@sandbox.pagseguro.com.br");
+        $credCard->setSender()->setEmail(env("PAGSEGURO_EMAIL_SD"));
         $credCard->setSender()->setHash($req->hash);
         $credCard->setSender()->setPhone()->withParameters(71, 87728789);
         $credCard->setSender()->setDocument()->withParameters("CPF", "11111111111");
@@ -77,12 +94,14 @@ class Checkout extends Controller
         );
         $credCard->setToken($req->token);
         $credCard->setInstallment()->withParameters(
-            $req->numeroparcela,
-            $req->totalparcela,
-            2
+            // PARCELA ATUAL
+            $req->installments,
+            // VALOR DA PARCELAS
+            number_format($req->total, 2, ".", ""), 
+            false
         );
 
-        $credCard->setHolder()->setName("Roberto". " ". "Carlos");
+        $credCard->setHolder()->setName("Roberto". " "."Carlos");
         $credCard->setHolder()->setDocument()->withParameters("CPF", "11111111111");
         $credCard->setHolder()->setBirthDate("03/01/1990");
         $credCard->setHolder()->setPhone()->withParameters(71, 87728789);
@@ -90,39 +109,16 @@ class Checkout extends Controller
 
         $result = $credCard->register($this->getCrt());
 
-        echo "TUDO CERTO";
-
+        if($result)
+        {
+            echo "TUDO CERTO";
+        }
+        else
+        {
+            echo "DEU ERRADO";
+        }
     }
     
-
-    // FORMULÁRIO DE PAGAMENTO (NO CALL)
-    public function postPayment(Request $req)
-    {
-        $data = [];
-        $sessionCode = \PagSeguro\Services\Session::create(
-            $this->getCrt()
-        );
-        $IDSession = $sessionCode->getResult();
-        $data["sessionID"] = $IDSession;
-
-        return response()->json([
-            "pag_id" => $data
-        ]);
-    }
-
-
-    //PEGAR DADOS DO CARTÃO
-    public function pegarDadosCartao()
-    {
-
-    }
-
-
-    //CONFIRMAR PAGAMENTO
-    public function confirmarPagamento()
-    {
-
-    }
 
 
 
