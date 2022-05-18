@@ -41,7 +41,7 @@ Route::post("/post_new_password", [AuthApi::class, "newPassword"]);
 // ---------------- CONTA ----------------
 
 
-Route::get("/get_info_account", [Account::class, "getInfoAccount"]);
+Route::get("/get_info_account/{id}", [Account::class, "getInfoAccount"]);
 
 Route::post("/post_change_info_account", [
     Account::class, "changeInfoAccount"

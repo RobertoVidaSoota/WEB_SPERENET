@@ -22,9 +22,13 @@ class Account extends Controller
 
 
     // PEGAR INFORMAÇÕES GERAIS DA CONTA
-    public function getInfoAccount()
+    public function getInfoAccount(User $id)
     {
-        $user = User::with("info_pessoais", "endereco")->get();
+        $userInfoAc = User::with("infoPessoais", "endereco")->find($id);
+
+        return response()->json([
+            "data" => $userInfoAc
+        ]);
     }
 
 
