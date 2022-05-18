@@ -62,41 +62,41 @@ class User extends Authenticatable
 
     public function infoPessoais()
     {
-        return $this->hasOne(InfoPessoais::class);
+        return $this->hasOne(InfoPessoais::class, 'fk_id_usuario');
     }
 
 
 
     public function endereco()
     {
-        return $this->hasOne(Endereco::class);
+        return $this->hasOne(Endereco::class, 'fk_id_usuario');
     }
 
 
 
     public function usuarioDesejos()
     {
-        return $this->hasMany(UsuarioDesejos::class);
+        return $this->hasMany(UsuarioDesejos::class, 'fk_id_usuario');
     }
 
 
 
     public function comentarios()
     {
-        return $this->hasMany(Comentarios::class);
+        return $this->hasMany(Comentarios::class, 'fk_id_usuario');
     }
 
 
 
     public function compras()
     {
-        return $this->hasMany(Compras::class);
+        return $this->hasMany(Compras::class, 'fk_id_usuario');
     }
 
 
 
     public function notificacoes()
     {
-        return $this->hasOne(Notificacoes::class);
+        return $this->hasOne(Notificacoes::class, 'fk_id_usuario');
     }
 }
