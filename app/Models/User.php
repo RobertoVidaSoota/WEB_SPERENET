@@ -19,7 +19,7 @@ class User extends Authenticatable
     use TwoFactorAuthenticatable;
 
     /**
-     * The attributes that are mass assignable.
+     * The attributes that are mass assignable. (VEM NO SELECT)
      *
      * @var string[]
      */
@@ -30,12 +30,12 @@ class User extends Authenticatable
     ];
 
     /**
-     * The attributes that should be hidden for serialization.
-     *
+     * The attributes that should be hidden for serialization. (NÃO VEM NO SELECT)
+     * 
      * @var array
      */
     protected $hidden = [
-        'password',
+        // 'password',
         'remember_token',
         'two_factor_recovery_codes',
         'two_factor_secret',

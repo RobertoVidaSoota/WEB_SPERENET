@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\
 {
     Account,
-    AuthApi,
+    AuthUser,
     Checkout,
     Shop
 };
@@ -30,11 +30,11 @@ use App\Http\Controllers\
 // ---------------- AUTENTICAÇÃO ----------------
 
 
-Route::post("/post_login_user", [AuthApi::class, "loginUser"]);
+Route::post("/post_login_user", [AuthUser::class, "loginUser"]);//
 
-Route::post("/post_register_user", [AuthApi::class, "registerUser"]);
+Route::post("/post_register_user", [AuthUser::class, "registerUser"]);
 
-Route::post("/post_new_password", [AuthApi::class, "newPassword"]);
+Route::post("/post_new_password", [AuthUser::class, "newPassword"]);
 
 
 

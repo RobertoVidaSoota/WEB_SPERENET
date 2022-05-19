@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 
-class AuthApi extends Controller
+class AuthUser extends Controller
 {
     // -------------- SUMÁRIO -------------- \\
 
@@ -31,12 +31,14 @@ class AuthApi extends Controller
     public function loginUser(Request $req)
     {
         $email = $req->email;
+        $password = $req->password;
         $user = User::where("email", "=", $email)->get();
-        $password = Hash::check($req->password, $user->password);
-        
-        if($user)
+
+        $hashVerify = Hash::check($password, $user[0]->password);
+
+        if($hashVerify && $user)
         {
-            $token = Auth::guard('api')->attempt(
+            $token = Auth::attempt(
                 [
                   "email" => $email,
                   "password" => $password
@@ -44,16 +46,16 @@ class AuthApi extends Controller
             );
 
             if ($token) {
-                return response()->json(["user" => $user]);
+                return response()->json(["user" => $user[0]]);
             }
             else
             {
-                return response()->json(["msg", "Erro la no server."]);
+                return response()->json(["msg" => "Erro la no server."]);
             }
         }
         else
         {
-            return response()->json(["msg", "Esses dados são inválidos."]);
+            return response()->json(["msg" => "Esses dados são inválidos."]);
         }
     }
 
