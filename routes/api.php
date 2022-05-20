@@ -68,7 +68,7 @@ Route::post("/post_change_user_notification", [
 // NOVOS PRODUTOS
 Route::get("/get_new_products", [
     Shop::class, "getNewProducts"
-]);
+]);//
 
 // PRODUTOS POPULARES
 Route::get("/post_pop_products", [
@@ -103,18 +103,18 @@ Route::post("/post_cart", [
 // MÉTODO DE PAGAMENTO
 Route::post("/post_pay_method", [
     Checkout::class, "postPayMethod"
-]);
+]);//
 
 
 // PEGAR SESSÃO DA TRANSAÇÃO
 Route::get("/get_session_pagseguro", [
     Checkout::class, "getSessionPagseguro"
-]);
+]);//
 
 // CONFIRMAR PAGAMENTO
 Route::post("/post_final_payment", [
     Checkout::class, "finalPayment"
-]);
+]);//
 
 // REASTREAMENTO DE PRODUTO
 Route::post("/post_track_product", [
