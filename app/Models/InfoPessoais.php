@@ -15,9 +15,7 @@ class InfoPessoais extends Model
         "telefone",
         "cpf",
         "nascimento",
-    ];
-    protected $casts = [
-        "fk_id_usuario" => "int"
+        "fk_id_usuario"
     ];
 
 

@@ -62,30 +62,34 @@ class AuthUser extends Controller
 
 
     // CADASTRO DO USUARIO
-    public function resgisterUser(Request $req)
+    public function registerUser(Request $req)
     {
-        $user = [ $req->email, $req->senha];
-
-        $info_pessoais = [ 
-            $req->nome_usuario, 
-            $req->telefone, 
-            $req->cpf, 
-            $req->nascimento,
-            $req->fk_id_usuario];
-
-        $endereco = [ 
-            $req->cep,
-            $req->pais,
-            $req->uf,
-            $req->cidade,
-            $req->bairro,
-            $req->rua,
-            $req->numero,
-            $req->fk_id_usuario,
+        $user = [
+            "email" => $req->email, 
+            "password" => bcrypt($req->senha)
         ];
 
-
         $user = User::create($user);
+
+        $info_pessoais = [ 
+            "nome_usuario" => $req->nome_usuario, 
+            "telefone" => $req->telefone, 
+            "cpf" => $req->cpf, 
+            "nascimento" => $req->nascimento,
+            "fk_id_usuario" => $user->id
+        ];
+
+        $endereco = [ 
+            "cep" => $req->cep,
+            "pais" => $req->pais,
+            "uf" => $req->uf,
+            "cidade" => $req->cidade,
+            "bairro" => $req->bairro,
+            "rua" => $req->rua,
+            "numero" => $req->numero,
+            "fk_id_usuario" => $user->id
+        ];
+
         $endereco = Endereco::create($endereco);
         $info_pessoais = InfoPessoais::create($info_pessoais);
 

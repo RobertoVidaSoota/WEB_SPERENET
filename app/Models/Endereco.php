@@ -18,9 +18,7 @@ class Endereco extends Model
         "bairro",
         "rua",
         "numero",
-    ];
-    protected $casts = [
-        "fk_id_usuario" => "int"
+        "fk_id_usuario" 
     ];
 
 
