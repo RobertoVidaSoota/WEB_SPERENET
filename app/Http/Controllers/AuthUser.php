@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Mail\NovaSenha;
 use App\Models\Endereco;
 use App\Models\InfoPessoais;
+use App\Models\Notificacoes;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
@@ -92,8 +93,14 @@ class AuthUser extends Controller
 
         $endereco = Endereco::create($endereco);
         $info_pessoais = InfoPessoais::create($info_pessoais);
+        $notifications = Notificacoes::create([
+            "promocoes" => "Y",
+            "novidades" => "Y",
+            "atualizacoes" => "Y",
+            "pedidos" => "Y",
+        ]);
 
-        if($user && $endereco && $info_pessoais)
+        if($user && $endereco && $info_pessoais && $notifications)
         {
             return response()->json(["msg" => "Cadastro realizado"]);
         }

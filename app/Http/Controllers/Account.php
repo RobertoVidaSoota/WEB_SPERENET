@@ -14,9 +14,7 @@ class Account extends Controller
 
     // PEGAR INFORMAÇÕES GERAIS DA CONTA (localstorage é melhor ?)
     // ALTERAR INFORMAÇÕES GERAIS
-    // ALTERAR E-MAIL
-    // CONFIRMAR DOIS FATORES POR E-MAIL
-    // ALTERA PREFERÊNCIAS DE NOTIFICAÇÃO
+    // ALTERAR PREFERÊNCIAS DE NOTIFICAÇÃO
     
 
 
@@ -78,76 +76,76 @@ class Account extends Controller
 
 
 
-    // ALTERAR E-MAIL
-    public function changeEmail(Request $req)
-    {
-        $id = $req->id;
-        $email = $req->email;
+    // // ALTERAR E-MAIL
+    // public function changeEmail(Request $req)
+    // {
+    //     $id = $req->id;
+    //     $email = $req->email;
 
-        $user = User::findOrFail($id);
-        $user->update(["email" => $email]);
+    //     $user = User::findOrFail($id);
+    //     $user->update(["email" => $email]);
 
-        if($user)
-        {
-            return response()->json([
-                "msg" => "E-mail alterado com sucesso."
-            ]);
-        }
-        else
-        {
-            return response()->json([
-                "msg" => "Erro para alterar o e-mail."
-            ]);
-        }
-    }
-
-
-
-
-    // CONFIRMAR DOIS FATORES POR E-MAIL
-    public function confirmEmailTwoFA(Request $req)
-    {
-        $device = $req->device;
-        $id = $req->id;
-        $two_factor_secret = password_hash($device.$id, "12");
-
-        $user = User::findOrFail($id);
-        $user->update([
-            "two_factor_secret" => $two_factor_secret,
-            "dois_fatores" => 'Y'
-        ]);
-
-        if($user)
-        {
-            return response()->json([
-                "msg" => "Chave de dois fatores foi ativada."
-            ]);
-        }
-        else
-        {
-            return response()->json([
-                "msg" => "Erro na ativação na chave de dois fatores."
-            ]);
-        }
-    }
+    //     if($user)
+    //     {
+    //         return response()->json([
+    //             "msg" => "E-mail alterado com sucesso."
+    //         ]);
+    //     }
+    //     else
+    //     {
+    //         return response()->json([
+    //             "msg" => "Erro para alterar o e-mail."
+    //         ]);
+    //     }
+    // }
 
 
 
 
-    // ALTERA PREFERÊNCIAS DE NOTIFICAÇÃO
+    // // CONFIRMAR DOIS FATORES POR E-MAIL
+    // public function confirmEmailTwoFA(Request $req)
+    // {
+    //     $device = $req->device;
+    //     $id = $req->id;
+    //     $two_factor_secret = password_hash($device.$id, "12");
+
+    //     $user = User::findOrFail($id);
+    //     $user->update([
+    //         "two_factor_secret" => $two_factor_secret,
+    //         "dois_fatores" => 'Y'
+    //     ]);
+
+    //     if($user)
+    //     {
+    //         return response()->json([
+    //             "msg" => "Chave de dois fatores foi ativada."
+    //         ]);
+    //     }
+    //     else
+    //     {
+    //         return response()->json([
+    //             "msg" => "Erro na ativação na chave de dois fatores."
+    //         ]);
+    //     }
+    // }
+
+
+
+
+    // ALTERAR PREFERÊNCIAS DE NOTIFICAÇÃO
     public function changeUserNotification(Request $req)
     {
         $id_user = $req->id_user;
 
-        $reqNotifications = [
-            $req->promocoes,
-            $req->novidades,
-            $req->atualizacoes,
-            $req->pedidos,
+        $notifications = [
+            "promocoes" => $req->promocoes,
+            "novidades" => $req->novidades,
+            "atualizacoes" => $req->atualizacoes,
+            "pedidos" => $req->pedidos,
         ];
 
-        $notifications = Notificacoes::findOrFail($id_user);
-        $notifications->update($reqNotifications);
+        $notifications = Notificacoes::where("fk_id_usuario", "=", $id_user)
+            ->update($notifications);
 
         if($notifications)
         {
