@@ -17,7 +17,7 @@ class AuthUser extends Controller
 
     // LOGIN DO USUÁRIO
     // CADASTRO DO USUARIO
-    // RECUPERAR SENHA
+    // MUDAR SENHA
 
     // public function __construct()
     // {   
@@ -106,22 +106,23 @@ class AuthUser extends Controller
 
 
 
-    // RECUPERAR SENHA
+    // MUDAR SENHA
     public function newPassword(Request $req)
     {
         $email = $req->email;
+        $newPassword = bcrypt($req->password);
 
-        $enviar = Mail::to($email)->send(new NovaSenha);
+        $user = User::where("email", "=", $email)->update(["password" => $newPassword]);
 
-        if($enviar)
+        if($user)
         {
-            return response()->json(
-                ["msg" => "Email de recuperação enviado com sucesso."]
-            );
+            return response()->json([
+                    "msg" => "Sua senha foi atualizada com sucesso."
+                ]);
         }
         else
         {
-            return response()->json(["msg" => "Erro ao enviar o e-mail"]);
+            return response()->json(["msg" => "Erro ao atualizar a senha"]);
         }
     }
 }

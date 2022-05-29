@@ -15,7 +15,6 @@ class Account extends Controller
     // PEGAR INFORMAÇÕES GERAIS DA CONTA (localstorage é melhor ?)
     // ALTERAR INFORMAÇÕES GERAIS
     // ALTERAR E-MAIL
-    // ALTERAR SENHA
     // CONFIRMAR DOIS FATORES POR E-MAIL
     // ALTERA PREFERÊNCIAS DE NOTIFICAÇÃO
     
@@ -101,32 +100,6 @@ class Account extends Controller
         {
             return response()->json([
                 "msg" => "Erro para alterar o e-mail."
-            ]);
-        }
-    }
-
-
-
-
-    // ALTERAR SENHA
-    public function changePassword(Request $req)
-    {
-        $id = $req->id;
-        $password = bcrypt($req->password);
-
-        $user = User::findOrFail($id);
-        $user->update(["password" => $password]);
-
-        if($user)
-        {
-            return response()->json([
-                "msg" => "Senha alterada com sucesso."
-            ]);
-        }
-        else
-        {
-            return response()->json([
-                "msg" => "Erro para alterar a senha."
             ]);
         }
     }

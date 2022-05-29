@@ -34,7 +34,7 @@ Route::post("/post_login_user", [AuthUser::class, "loginUser"]);//
 
 Route::post("/post_register_user", [AuthUser::class, "registerUser"]);//
 
-Route::post("/post_new_password", [AuthUser::class, "newPassword"]);
+Route::post("/post_new_password", [AuthUser::class, "newPassword"]);//
 
 
 
@@ -48,8 +48,6 @@ Route::post("/post_change_info_account", [
 ]);
 
 Route::post("/post_change_email", [Account::class, "changeEmail"]);
-
-Route::post("/post_change_password", [Account::class, "changePassword"]);
 
 Route::post("/post_confirm_email_twofa", [
     Account::class, "confirmEmailTwoFA"
