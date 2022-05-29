@@ -45,7 +45,7 @@ Route::get("/get_info_account/{id}", [Account::class, "getInfoAccount"]);//
 
 Route::post("/post_change_info_account", [
     Account::class, "changeInfoAccount"
-]);
+]);//
 
 Route::post("/post_change_email", [Account::class, "changeEmail"]);
 

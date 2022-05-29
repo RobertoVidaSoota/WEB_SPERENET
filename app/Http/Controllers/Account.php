@@ -38,30 +38,27 @@ class Account extends Controller
     {
         $id_user = $req->id_user;
 
-        $reqInfo_pessoais = [ 
-            $req->nome_usuario, 
-            $req->telefone, 
-            $req->cpf, 
-            $req->nascimento,
-            $id_user
+        $info_pessoais = [ 
+            "nome_usuario" => $req->nome_usuario, 
+            "telefone" => $req->telefone, 
+            "cpf" => $req->cpf, 
+            "nascimento" => $req->nascimento,
         ];
 
-        $reqEndereco = [ 
-            $req->cep,
-            $req->pais,
-            $req->uf,
-            $req->cidade,
-            $req->bairro,
-            $req->rua,
-            $req->numero,
-            $id_user,
+        $endereco = [ 
+            "cep" => $req->cep,
+            "pais" => $req->pais,
+            "uf" => $req->uf,
+            "cidade" => $req->cidade,
+            "bairro" => $req->bairro,
+            "rua" => $req->rua,
+            "numero" => $req->numero,
         ];
 
-        $endereco = Endereco::findOrFail($id_user);
-        $info_pessoais = InfoPessoais::findOrFail($id_user);
-
-        $endereco->update($reqEndereco);
-        $info_pessoais->update($reqInfo_pessoais);
+        $info_pessoais = InfoPessoais::where("fk_id_usuario", "=", $id_user)
+            ->update($info_pessoais);
+        $endereco = Endereco::where("fk_id_usuario", "=", $id_user)
+            ->update($endereco);
 
         if($endereco and $info_pessoais)
         {
