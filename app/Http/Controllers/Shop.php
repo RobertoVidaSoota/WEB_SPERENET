@@ -34,34 +34,43 @@ class Shop extends Controller
 
 
     // PEGAR PRODUTOS POPULARES ( with = lado de muitos[n])
-    public function postPopProducts(Request $req)
+    public function getPopProducts(Request $req)
     {
-        $user_id = $req->user_id;
-        $product_id = $req->product_id;
-        $countsComents = Produto::with("comentarios")
-            ->count()
-            ->get();
+        $productsObj = Produto::with("comentarios")->limit(3)->get();
 
-        $products = Produto::with("comentarios")
-            ->orderBy($countsComents, "desc")
-            ->get();
-        
-        $starsAVG = Comentarios::where("fk_id_produto", $product_id)
-            ->avg("estrelas")
-            ->get();
-
-        if($products)
+        for ($i = 0; $i < 3; $i++) 
         {
-            return response()->json([
-                "msg" => "Deu certo",
-                "data" => $products
-            ]);
-        }else
-        {
-            return response()->json([
-                "msg" => "Deu errado" 
-                ]);
+            $procuctsId[] = $productsObj[$i]->id;
+            $countsComents = Comentarios::where("fk_id_produto", $procuctsId[$i])->count();
+            $countsReturn[] = $countsComents;
         }
+
+        return $countsReturn;
+
+        // response()->json([
+        //             "msg" => "Deu certo",
+        //             "quantidade_comentarios" => $countsComents,
+        //         ]);
+        
+        // $starsAVG = Comentarios::where("fk_id_produto", $product_id)
+        //     ->avg("estrelas");
+
+        
+
+        // if($products)
+        // {
+        //     return response()->json([
+        //         "msg" => "Deu certo",
+        //         "produtos" => $products,
+        //         "quantidade_comentarios" => $countsComents,
+        //         "media_estrelas" => $starsAVG
+        //     ]);
+        // }else
+        // {
+        //     return response()->json([
+        //         "msg" => "Deu errado" 
+        //     ]);
+        // }
     }
 
 

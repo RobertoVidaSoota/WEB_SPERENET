@@ -21,34 +21,34 @@ class Produto extends Model
 
     public function usuarioDesejos()
     {
-        return $this->hasMany(UsuarioDesejos::class);
+        return $this->hasMany(UsuarioDesejos::class, "fk_id_produto");
     }
 
 
 
     public function produtoCategoria()
     {
-        return $this->hasMany(ProdutoCategoria::class);
+        return $this->hasMany(ProdutoCategoria::class, "fk_id_produto");
     }
 
 
 
     public function especificacoes()
     {
-        return $this->hasMany(especificacao::class);
+        return $this->hasMany(especificacao::class, "fk_id_produto");
     }
 
 
 
     public function comentarios()
     {
-        return $this->hasMany(Comentarios::class);
+        return $this->hasMany(Comentarios::class, "fk_id_produto");
     }
 
 
 
     public function compras()
     {
-        return $this->hasMany(Compras::class);
+        return $this->hasMany(Compras::class, "fk_id_produto");
     }
 }

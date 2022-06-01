@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Comentarios;
 use App\Models\Produto;
 use Illuminate\Database\Seeder;
 use Faker\Factory as Faker;
@@ -18,13 +19,16 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         $faker = Faker::create();
+        $arrayUserId = array(1, 2, 6);
+        $roundArray = array(0.0, 0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0, 4.5, 5.0);
 
-        // for($i = 1 ; $i <= 30 ; $i++){
-        //     Produto::create([
-        //         "nome_produto" => $faker->text(14),
-        //         "link_imagem" => "sem link",
-        //         "preco_produto" => "R$ ".rand(300, 9999).",".rand(13, 99)."",
-        //         "descricao" => $faker->paragraph()
+        // for($i = 1 ; $i <= 270 ; $i++){
+        //     Comentarios::create([
+        //         "texto_comentario" => $faker->text(40),
+        //         "estrelas" => $roundArray[rand(0, 10)],
+        //         "resposta" => "N",
+        //         "fk_id_usuario" => $arrayUserId[rand(0, 2)],
+        //         "fk_id_produto" => rand(1, 30),
         //     ]);
         // }
     }
