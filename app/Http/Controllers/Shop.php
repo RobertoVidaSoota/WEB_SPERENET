@@ -36,41 +36,32 @@ class Shop extends Controller
     // PEGAR PRODUTOS POPULARES ( with = lado de muitos[n])
     public function getPopProducts(Request $req)
     {
-        $productsObj = Produto::with("comentarios")->limit(3)->get();
+        $productsObj = Produto::with("comentarios")->limit(5)->get();
 
-        for ($i = 0; $i < 3; $i++) 
+        for ($i = 0; $i < 5; $i++) 
         {
             $procuctsId[] = $productsObj[$i]->id;
+
             $countsComents = Comentarios::where("fk_id_produto", $procuctsId[$i])->count();
-            $countsReturn[] = $countsComents;
+            $productsReturn[$i] = $productsObj[$i];
+            $productsReturn[$i]["quantidade_comentarios"] = $countsComents;
+            
+            $starsAVG = Comentarios::where("fk_id_produto", $procuctsId[$i])
+            ->avg("estrelas");
+            $productsReturn[$i]["media_avaliacoes"] = $starsAVG;
         }
 
-        return $countsReturn;
-
-        // response()->json([
-        //             "msg" => "Deu certo",
-        //             "quantidade_comentarios" => $countsComents,
-        //         ]);
-        
-        // $starsAVG = Comentarios::where("fk_id_produto", $product_id)
-        //     ->avg("estrelas");
-
-        
-
-        // if($products)
-        // {
-        //     return response()->json([
-        //         "msg" => "Deu certo",
-        //         "produtos" => $products,
-        //         "quantidade_comentarios" => $countsComents,
-        //         "media_estrelas" => $starsAVG
-        //     ]);
-        // }else
-        // {
-        //     return response()->json([
-        //         "msg" => "Deu errado" 
-        //     ]);
-        // }
+        if($productsObj)
+        {
+            return response()->json([
+                "produtos" => $productsReturn
+            ]);
+        }else
+        {
+            return response()->json([
+                "msg" => "Deu errado" 
+            ]);
+        }
     }
 
 

@@ -70,7 +70,7 @@ Route::get("/get_new_products", [
 
 // PRODUTOS POPULARES
 Route::get("/get_pop_products", [
-    Shop::class, "postPopProducts"
+    Shop::class, "getPopProducts"
 ]);
 
 // PESQUISAR
