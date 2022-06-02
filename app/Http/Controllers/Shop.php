@@ -34,7 +34,7 @@ class Shop extends Controller
 
 
     // PEGAR PRODUTOS POPULARES ( with = lado de muitos[n])
-    public function getPopProducts(Request $req)
+    public function getPopProducts()
     {
         $productsObj = Produto::with("comentarios")->limit(5)->get();
 
@@ -45,7 +45,7 @@ class Shop extends Controller
             $countsComents = Comentarios::where("fk_id_produto", $procuctsId[$i])->count();
             $productsReturn[$i] = $productsObj[$i];
             $productsReturn[$i]["quantidade_comentarios"] = $countsComents;
-            
+
             $starsAVG = Comentarios::where("fk_id_produto", $procuctsId[$i])
             ->avg("estrelas");
             $productsReturn[$i]["media_avaliacoes"] = $starsAVG;
