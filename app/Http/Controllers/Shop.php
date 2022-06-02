@@ -7,6 +7,7 @@ use App\Models\Especificacoes;
 use App\Models\Produto;
 use App\Models\UsuarioDesejos;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class Shop extends Controller
 {
@@ -36,25 +37,22 @@ class Shop extends Controller
     // PEGAR PRODUTOS POPULARES ( with = lado de muitos[n])
     public function getPopProducts()
     {
-        $productsObj = Produto::with("comentarios")->limit(5)->get();
-
-        for ($i = 0; $i < 5; $i++) 
-        {
-            $procuctsId[] = $productsObj[$i]->id;
-
-            $countsComents = Comentarios::where("fk_id_produto", $procuctsId[$i])->count();
-            $productsReturn[$i] = $productsObj[$i];
-            $productsReturn[$i]["quantidade_comentarios"] = $countsComents;
-
-            $starsAVG = Comentarios::where("fk_id_produto", $procuctsId[$i])
-            ->avg("estrelas");
-            $productsReturn[$i]["media_avaliacoes"] = $starsAVG;
-        }
+        $productsObj = DB::select("
+            SELECT produto.*, avg(estrelas) as media_estrelas,
+            count(comentarios.fk_id_produto) as quantidade_comentarios
+            FROM produto 
+            JOIN comentarios
+            ON produto.id = comentarios.fk_id_produto
+            GROUP BY produto.id, nome_produto, link_imagem, preco_produto,
+            descricao, created_at, updated_at
+            ORDER BY avg(estrelas) desc
+            LIMIT 3;
+        ");
 
         if($productsObj)
         {
             return response()->json([
-                "produtos" => $productsReturn
+                "produtos" => $productsObj
             ]);
         }else
         {

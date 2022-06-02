@@ -71,7 +71,7 @@ Route::get("/get_new_products", [
 // PRODUTOS POPULARES
 Route::get("/get_pop_products", [
     Shop::class, "getPopProducts"
-]);
+]);//
 
 // PESQUISAR
 Route::post("/post_search", [
@@ -114,7 +114,7 @@ Route::post("/post_final_payment", [
     Checkout::class, "finalPayment"
 ]);//
 
-// REASTREAMENTO DE PRODUTO
+// REASTREAMENTO DE PRODUTO (TESTAR COM O APP)
 Route::post("/post_track_product", [
     Checkout::class, "postTrackProduct"
 ]);
