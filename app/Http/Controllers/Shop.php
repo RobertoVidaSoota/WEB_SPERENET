@@ -91,14 +91,20 @@ class Shop extends Controller
     public function postWishlist(Request $req)
     {
         $user_id = $req->user_id;
-        $product_id = $req->product_id;
-        $products = UsuarioDesejos::with("user", "produto")
-            ->where("fk_id_usuario", "=", $user_id)
-            ->get();
-            
-        $starsAVG = Comentarios::where("fk_id_produto", $product_id)
-            ->avg("estrelas")
-            ->get();
+        
+        $products = DB::select("
+            SELECT link_imagem, nome_produto, preco_produto,
+            avg(estrelas) as media_estrelas
+            FROM produto
+            JOIN users JOIN usuario_desejos JOIN comentarios
+            ON users.id = usuario_desejos.fk_id_usuario
+            AND produto.id = usuario_desejos.fk_id_produto
+            AND produto.id = comentarios.fk_id_produto
+            WHERE usuario_desejos.fk_id_usuario = ".$user_id."
+            GROUP BY usuario_desejos.id, usuario_desejos.fk_id_produto,
+            usuario_desejos.fk_id_usuario, usuario_desejos.created_at,
+            usuario_desejos.updated_at;
+        ");
         
         if($products)
         {
