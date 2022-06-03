@@ -86,7 +86,7 @@ Route::post("/post_wishlist", [
 // PÁGINA DO PRODUTO
 Route::post("/post_page_product", [
     Shop::class, "postPageProduct"
-]);
+]);//
 
 
 

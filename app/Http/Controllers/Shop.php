@@ -135,13 +135,19 @@ class Shop extends Controller
         )
         ->get();
 
-        $coments = Comentarios::with("user", "produto");
+        $coments = Comentarios::with("user", "produto")->where(
+            "comentarios.fk_id_produto", "=", $product_id
+        )->get();
         
         if($products)
         {
             return response()->json([
                 "msg" => "Deu certo",
-                "data" => $products
+                "data" => [
+                    "produto" => $products,
+                    "especificacoes" => $specifications,
+                    "comentarios" => $coments
+                ]
             ]);
         }else
         {
