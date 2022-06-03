@@ -76,7 +76,7 @@ Route::get("/get_pop_products", [
 // PESQUISAR
 Route::post("/post_search", [
     Shop::class, "postSearch"
-]);
+]);//
 
 // LISTAR DESEJOS
 Route::post("/post_wishlist", [

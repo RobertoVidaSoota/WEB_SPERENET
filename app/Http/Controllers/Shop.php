@@ -52,7 +52,7 @@ class Shop extends Controller
         if($productsObj)
         {
             return response()->json([
-                "produtos" => $productsObj
+                "data" => $productsObj
             ]);
         }else
         {
