@@ -81,7 +81,7 @@ Route::post("/post_search", [
 // LISTAR DESEJOS
 Route::post("/post_wishlist", [
     Shop::class, "postWishlist"
-]);
+]);//
 
 // PÁGINA DO PRODUTO
 Route::post("/post_page_product", [

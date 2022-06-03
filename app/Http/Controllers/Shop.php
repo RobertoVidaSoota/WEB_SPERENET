@@ -91,7 +91,7 @@ class Shop extends Controller
     public function postWishlist(Request $req)
     {
         $user_id = $req->user_id;
-        
+
         $products = DB::select("
             SELECT link_imagem, nome_produto, preco_produto,
             avg(estrelas) as media_estrelas
@@ -103,7 +103,8 @@ class Shop extends Controller
             WHERE usuario_desejos.fk_id_usuario = ".$user_id."
             GROUP BY usuario_desejos.id, usuario_desejos.fk_id_produto,
             usuario_desejos.fk_id_usuario, usuario_desejos.created_at,
-            usuario_desejos.updated_at;
+            usuario_desejos.updated_at, link_imagem, nome_produto, 
+            preco_produto;
         ");
         
         if($products)
@@ -134,8 +135,7 @@ class Shop extends Controller
         )
         ->get();
 
-        $coments = Comentarios::with("user", "produto")
-            ->where("fk_id_produto", $product_id);
+        $coments = Comentarios::with("user", "produto");
         
         if($products)
         {
