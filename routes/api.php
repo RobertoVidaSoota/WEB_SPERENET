@@ -47,8 +47,6 @@ Route::post("/post_change_info_account", [
     Account::class, "changeInfoAccount"
 ]);//
 
-// Route::post("/post_change_email", [Account::class, "changeEmail"]);
-
 // Route::post("/post_confirm_email_twofa", [
 //     Account::class, "confirmEmailTwoFA"
 // ]);

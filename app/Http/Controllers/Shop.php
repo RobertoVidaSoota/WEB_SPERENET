@@ -135,9 +135,13 @@ class Shop extends Controller
         )
         ->get();
 
-        $coments = Comentarios::with("user", "produto")->where(
-            "comentarios.fk_id_produto", "=", $product_id
-        )->get();
+        $coments = DB::table("comentarios")
+            ->join("users", "users.id", "=", "comentarios.fk_id_usuario")
+            ->select("users.id", "users.name", "users.profile_photo_path", 
+                "comentarios.estrelas", "comentarios.texto_comentario", 
+            )
+            ->where("comentarios.fk_id_produto", "=", $product_id)
+            ->get();
         
         if($products)
         {

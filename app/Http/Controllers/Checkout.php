@@ -134,7 +134,7 @@ class Checkout extends Controller
     }
 
 
-    // MÉTODO DE PAGAMENTO
+    // MÉTODO DE PAGAMENTO(TESTAR COM APP)
     public function postPayMethod(Request $req)
     {
         $pix = $req->metodo_pix;
@@ -144,7 +144,7 @@ class Checkout extends Controller
 
 
 
-    // REASTREAMENTO DE PRODUTO
+    // REASTREAMENTO DE PRODUTO(TESTAR COM APP)
     public function postTrackProduct(Request $req)
     {
         $user_id = $req->user_id;

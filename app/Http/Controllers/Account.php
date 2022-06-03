@@ -75,33 +75,6 @@ class Account extends Controller
 
 
 
-
-    // // ALTERAR E-MAIL
-    // public function changeEmail(Request $req)
-    // {
-    //     $id = $req->id;
-    //     $email = $req->email;
-
-    //     $user = User::findOrFail($id);
-    //     $user->update(["email" => $email]);
-
-    //     if($user)
-    //     {
-    //         return response()->json([
-    //             "msg" => "E-mail alterado com sucesso."
-    //         ]);
-    //     }
-    //     else
-    //     {
-    //         return response()->json([
-    //             "msg" => "Erro para alterar o e-mail."
-    //         ]);
-    //     }
-    // }
-
-
-
-
     // // CONFIRMAR DOIS FATORES POR E-MAIL
     // public function confirmEmailTwoFA(Request $req)
     // {
