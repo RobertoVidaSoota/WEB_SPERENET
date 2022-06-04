@@ -12,7 +12,8 @@ class Carrinho extends Model
     protected $table = "carrinho";
     protected $fillable = [
         "quantidade_produto",
-        "preco_acumulado",
+        "fk_id_produto",
+        "fk_id_compras"
     ];
 
 

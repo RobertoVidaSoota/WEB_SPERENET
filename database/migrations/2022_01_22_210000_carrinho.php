@@ -16,12 +16,17 @@ class Carrinho extends Migration
         Schema::create("carrinho", function(Blueprint $table){
             $table->id();
             $table->integer("quantidade_produto");
-            $table->double("preco_acumulado", 50, 2);
 
             $table->unsignedBigInteger("fk_id_produto");
             $table->foreign("fk_id_produto")
                 ->references("id")
                 ->on("produto")
+                ->onUpdate("cascade")
+                ->onDelete("cascade");
+            $table->unsignedBigInteger("fk_id_compras");
+            $table->foreign("fk_id_compras")
+                ->references("id")
+                ->on("users")
                 ->onUpdate("cascade")
                 ->onDelete("cascade");
 

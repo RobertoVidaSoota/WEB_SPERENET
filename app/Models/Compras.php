@@ -12,16 +12,14 @@ class Compras extends Model
     protected $table = "compras";
     // COLOCAR OS FILLABLES NO MODEL CARRINHO
     protected $fillable = [
+        "valor_total",
         "metodo_pagamento",
         "link_boleto",
         "data_hora_compra",
         "status",
         "local_entrega",
         "local_atual",
-    ];
-    protected $casts = [
         "fk_id_usuario" => "int",
-        "fk_id_carrinho" => "int"
     ];
 
 
@@ -31,9 +29,4 @@ class Compras extends Model
         return $this->belongsTo(User::class);
     }
 
-
-    public function carrinho()
-    {
-        return $this->belongsTo(Carrinho::class);
-    }
 }

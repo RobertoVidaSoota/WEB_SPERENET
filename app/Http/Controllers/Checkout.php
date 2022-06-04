@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Carrinho;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\DB;
 use PagSeguro\Configuration\Configure;
 
 class Checkout extends Controller
@@ -128,8 +128,7 @@ class Checkout extends Controller
     public function postCart(Request $req)
     {
         $user_id = $req->user_id;
-        $carrinho = Carrinho::with("compras")
-            ->where("fk_id_usuario", "=", $user_id)
+        $carrinho = DB::table("compras")
             ->get();
     }
 

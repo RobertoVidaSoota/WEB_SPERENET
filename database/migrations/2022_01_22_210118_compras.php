@@ -15,6 +15,7 @@ class Compras extends Migration
     {
         Schema::create("compras", function(Blueprint $table){
             $table->id();
+            $table->double("valor_total", 50, 2);
             $table->string("metodo_pagamento", 20)->nullable();
             $table->string("link_boleto", 300)->nullable();
             $table->dateTime("data_hora_compra")->nullable();
@@ -23,15 +24,9 @@ class Compras extends Migration
             $table->string("local_atual", 100)->nullable();
 
             $table->unsignedBigInteger("fk_id_usuario");
-            $table->unsignedBigInteger("fk_id_carrinho");
             $table->foreign("fk_id_usuario")
                 ->references("id")
                 ->on("users")
-                ->onUpdate("cascade")
-                ->onDelete("cascade");
-            $table->foreign("fk_id_carrinho")
-                ->references("id")
-                ->on("carrinho")
                 ->onUpdate("cascade")
                 ->onDelete("cascade");
 
