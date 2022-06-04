@@ -17,23 +17,16 @@ class Compras extends Migration
             $table->id();
             $table->string("metodo_pagamento", 20)->nullable();
             $table->string("link_boleto", 300)->nullable();
-            $table->string("valor_final", 12)->nullable();
             $table->dateTime("data_hora_compra")->nullable();
             $table->string("status", 50)->nullable();
             $table->string("local_entrega", 100)->nullable();
             $table->string("local_atual", 100)->nullable();
 
             $table->unsignedBigInteger("fk_id_usuario");
-            $table->unsignedBigInteger("fk_id_produto");
             $table->unsignedBigInteger("fk_id_carrinho");
             $table->foreign("fk_id_usuario")
                 ->references("id")
                 ->on("users")
-                ->onUpdate("cascade")
-                ->onDelete("cascade");
-            $table->foreign("fk_id_produto")
-                ->references("id")
-                ->on("produto")
                 ->onUpdate("cascade")
                 ->onDelete("cascade");
             $table->foreign("fk_id_carrinho")

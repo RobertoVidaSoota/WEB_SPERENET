@@ -14,7 +14,6 @@ class Compras extends Model
     protected $fillable = [
         "metodo_pagamento",
         "link_boleto",
-        "valor_final",
         "data_hora_compra",
         "status",
         "local_entrega",
@@ -22,7 +21,6 @@ class Compras extends Model
     ];
     protected $casts = [
         "fk_id_usuario" => "int",
-        "fk_id_pruduto" => "int",
         "fk_id_carrinho" => "int"
     ];
 
@@ -32,14 +30,6 @@ class Compras extends Model
     {
         return $this->belongsTo(User::class);
     }
-
-
-
-    public function produto()
-    {
-        return $this->belongsTo(Produto::class);
-    }
-
 
 
     public function carrinho()
