@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Carrinho;
+use App\Models\Compras;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use PagSeguro\Configuration\Configure;
@@ -140,19 +141,18 @@ class Checkout extends Controller
     {
         $user_id = $req->user_id;
 
-        $purchases = DB::table("compras")
-            ->where("fk_id_usuario", "=", $user_id)
+        $purchases = Compras::where("fk_id_usuario", "=", $user_id)
             ->get();    
 
         for ($i = 0; $i < count($purchases); $i++)
         {
-            $products = DB::table("produto")
+            $products = DB::table("carrinho")
                 ->select("carrinho.id", "carrinho.quantidade_produto",
                 "carrinho.fk_id_produto", "carrinho.fk_id_compras",
                 "produto.nome_produto", "produto.preco_produto",
                 "produto.link_imagem")
                 ->join("compras", "compras.id", "carrinho.fk_id_compras")
-                ->join("carrinho", "produto.id", "carrinho.fk_id_produto")
+                ->join("produto", "produto.id", "carrinho.fk_id_produto")
                 ->where("compras.fk_id_usuario" , "=", $user_id)
                 ->get();
 
