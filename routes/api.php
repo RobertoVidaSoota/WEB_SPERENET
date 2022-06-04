@@ -90,8 +90,11 @@ Route::post("/post_page_product", [
 
 // ---------------- PAGAMENTO ----------------
 
+Route::post("/post_purchases", [
+    Checkout::class, "postPurchases"
+]);
 
-// CARINHO DE COMPRA(TRAVADO)
+// CARINHO DE COMPRA(TESTAR COM O APP)
 Route::post("/post_cart", [
     Checkout::class, "postCart"
 ]);

@@ -128,9 +128,51 @@ class Checkout extends Controller
     public function postCart(Request $req)
     {
         $user_id = $req->user_id;
+        
+
         $carrinho = DB::table("compras")
             ->get();
     }
+
+
+    // LISTAR COMPRAS
+    public function postPurchases(Request $req)
+    {
+        $user_id = $req->user_id;
+
+        $purchases = DB::table("compras")
+            ->where("fk_id_usuario", "=", $user_id)
+            ->get();    
+
+        for ($i = 0; $i < count($purchases); $i++)
+        {
+            $products = DB::table("produto")
+                ->select("carrinho.id", "carrinho.quantidade_produto",
+                "carrinho.fk_id_produto", "carrinho.fk_id_compras",
+                "produto.nome_produto", "produto.preco_produto",
+                "produto.link_imagem")
+                ->join("compras", "compras.id", "carrinho.fk_id_compras")
+                ->join("carrinho", "produto.id", "carrinho.fk_id_produto")
+                ->where("compras.fk_id_usuario" , "=", $user_id)
+                ->get();
+
+            $purchases["produto"] = $products;
+        }
+
+        if($purchases)
+        {
+            return response()->json([
+                "compras" => $purchases
+            ]);
+        }
+        else
+        {
+            return response()->json([
+                "msg", "Erro no servidor"
+            ]);
+        }
+    }
+
 
 
     // MÉTODO DE PAGAMENTO(TESTAR COM APP)
@@ -147,8 +189,5 @@ class Checkout extends Controller
     public function postTrackProduct(Request $req)
     {
         $user_id = $req->user_id;
-        $carrinho = Carrinho::with("compras")
-            ->where("fk_id_usuario", "=", $user_id)
-            ->get();
     }
 }
