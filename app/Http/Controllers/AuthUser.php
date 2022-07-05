@@ -33,31 +33,28 @@ class AuthUser extends Controller
     {
         $email = $req->email;
         $password = $req->password;
-        $user = User::where("email", "=", $email)->get();
 
-        $hashVerify = Hash::check($password, $user[0]->password);
+        $user = User::where("email", $email)->get();
 
-        if($hashVerify && $user)
+        $token = Auth::attempt(
+            [
+                "email" => $email,
+                "password" => $password
+            ]
+        );
+
+        if ($token && $user) 
         {
-            $token = Auth::attempt(
-                [
-                  "email" => $email,
-                  "password" => $password
-                ]
-            );
-
-            if ($token) {
-                return response()->json(["user" => $user[0]]);
-            }
-            else
-            {
-                return response()->json(["msg" => "Erro la no server."]);
-            }
+            $user[0]->password = "";
+            return response()->json([
+                "user" => $user[0]
+            ]);
         }
         else
         {
-            return response()->json(["msg" => "Esses dados são inválidos."]);
+            return response()->json(["msg" => "Dados inválidos"]);
         }
+        
     }
 
 
