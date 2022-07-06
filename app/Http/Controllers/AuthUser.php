@@ -64,7 +64,7 @@ class AuthUser extends Controller
     {
         $user = [
             "email" => $req->email, 
-            "password" => bcrypt($req->senha)
+            "password" => bcrypt($req->password)
         ];
 
         $user = User::create($user);
