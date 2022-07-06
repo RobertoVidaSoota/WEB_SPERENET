@@ -95,6 +95,7 @@ class AuthUser extends Controller
             "novidades" => "Y",
             "atualizacoes" => "Y",
             "pedidos" => "Y",
+            "fk_id_usuario" => $user->id
         ]);
 
         if($user && $endereco && $info_pessoais && $notifications)
