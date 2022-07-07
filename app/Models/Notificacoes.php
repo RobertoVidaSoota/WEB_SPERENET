@@ -15,10 +15,8 @@ class Notificacoes extends Model
         "promocoes",
         "novidades",
         "atualizacoes",
-        "pedidos"
-    ];
-    protected $casts = [
-        "fk_id_usuario" => "int"
+        "pedidos",
+        "fk_id_usuario"
     ];
 
 
