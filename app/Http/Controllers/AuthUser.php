@@ -25,6 +25,8 @@ class AuthUser extends Controller
     //     $this->middleware('auth:api');
     // }
 
+    private $emailUserComfirm;
+    private $emailCode;
 
 
 
@@ -106,6 +108,57 @@ class AuthUser extends Controller
         {
             return response()->json(["msg" => "Erro ao Cadastrar"]);
         }
+    }
+
+
+
+
+    // ENVIAR E-MAIL PARA MUDAR SENHA
+    public function sendEmailNewPassword(Request $req)
+    {
+        $emailUser = $req->email;
+        $emailCode = rand(163451, 912658);
+        $emailVerify = User::where("email", $emailUser)->get();
+
+        if($emailVerify)
+        {
+            $this->emailUserComfirm = $emailUser;
+            $this->emailCode = $emailCode;
+
+            $send = Mail::send([], [], function($message){
+                $message->to($this->emailUserComfirm)
+                ->subject("SPERENET: Nova senha")
+                ->setBody("
+                    <h1>Ola usuário !</h1>
+                    <p>
+                        O seu código de confirmação é <b>".$this->emailCode."</b>.
+                    </p>
+                    <p>@ Sperenet 2022</p>
+                ");
+            });
+
+            if($send)
+            {
+                return response()->json([
+                    "msg" => "O código de confirmação foi e-mail.",
+                    "send" => true,
+                    "code" => $this->emailCode
+                ]);
+            }
+            else
+            {
+                return response()->json([
+                    "msg" => "Erro ao enviar o e-mail."
+                ]);
+            }
+        }
+        else
+        {
+            return response()->json([
+                "msg" => "E-mail não está registrado."
+            ]);
+        }
+        
     }
 
 

@@ -34,6 +34,9 @@ Route::post("/post_login_user", [AuthUser::class, "loginUser"]);//
 
 Route::post("/post_register_user", [AuthUser::class, "registerUser"]);//
 
+Route::post("/post_send_email_new_password", [
+    AuthUser::class, "sendEmailNewPassword"]);//
+
 Route::post("/post_new_password", [AuthUser::class, "newPassword"]);//
 
 
