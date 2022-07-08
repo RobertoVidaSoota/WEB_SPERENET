@@ -160,7 +160,8 @@ class AuthUser extends Controller
         if($user)
         {
             return response()->json([
-                    "msg" => "Sua senha foi atualizada com sucesso."
+                    "msg" => "Sua senha foi atualizada com sucesso.",
+                    "change" => true
                 ]);
         }
         else
