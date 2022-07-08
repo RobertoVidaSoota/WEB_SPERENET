@@ -132,7 +132,7 @@ class AuthUser extends Controller
             });
 
             return response()->json([
-                "msg" => "O código de confirmação foi e-mail.",
+                "msg" => "O código de confirmação foi enviado para o seu e-mail.",
                 "send" => true,
                 "code" => $emailCode
             ]);
