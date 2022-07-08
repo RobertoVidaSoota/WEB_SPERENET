@@ -122,35 +122,20 @@ class AuthUser extends Controller
 
         if($emailVerify)
         {
-            $this->emailUserComfirm = $emailUser;
-            $this->emailCode = $emailCode;
+            $emailUserComfirm = $emailUser;
 
-            $send = Mail::send([], [], function($message){
-                $message->to($this->emailUserComfirm)
-                ->subject("SPERENET: Nova senha")
-                ->setBody("
-                    <h1>Ola usuário !</h1>
-                    <p>
-                        O seu código de confirmação é <b>".$this->emailCode."</b>.
-                    </p>
-                    <p>@ Sperenet 2022</p>
-                ");
+            $send = Mail::send("codeRec", ["emailCode" => $emailCode], function($message) 
+            use ($emailUserComfirm, $emailCode){
+                $message
+                ->to($emailUserComfirm)
+                ->subject("SPERENET: Nova senha");
             });
 
-            if($send)
-            {
-                return response()->json([
-                    "msg" => "O código de confirmação foi e-mail.",
-                    "send" => true,
-                    "code" => $this->emailCode
-                ]);
-            }
-            else
-            {
-                return response()->json([
-                    "msg" => "Erro ao enviar o e-mail."
-                ]);
-            }
+            return response()->json([
+                "msg" => "O código de confirmação foi e-mail.",
+                "send" => true,
+                "code" => $emailCode
+            ]);
         }
         else
         {
