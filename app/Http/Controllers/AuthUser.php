@@ -102,7 +102,11 @@ class AuthUser extends Controller
 
         if($user && $endereco && $info_pessoais && $notifications)
         {
-            return response()->json(["msg" => "Cadastro realizado"]);
+            return response()->json([
+                "msg" => "Cadastro realizado",
+                "register" => true,
+                "userData" => $user
+            ]);
         }
         else
         {
