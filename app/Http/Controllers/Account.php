@@ -25,6 +25,7 @@ class Account extends Controller
 
         if($userInfoAc)
         {
+            $userInfoAc[0]->password = "";
             return response()->json([
                 "data" => $userInfoAc
             ]); 
@@ -70,18 +71,74 @@ class Account extends Controller
         if($endereco and $info_pessoais)
         {
             return response()->json([
-                "msg" => "Alteração feita com sucesso."
+                "msg" => "Alteração feita com sucesso.",
+                "update" => true
             ]);
         }
         else
         {
             return response()->json([
-                "msg" => "Alteração não foi concluida."
+                "msg" => "Alteração não foi concluida.",
+                "update" => false
             ]);
         }
     }
 
 
+
+
+    // ALTERAR EMAIL
+    public function changeEmail(Request $req)
+    {
+        $id_user = $req->id_user;
+
+        $email = User::where("id", $id_user)->update([
+            "email" => $req->email
+        ]);
+
+        if($email)
+        {
+            return response()->json([
+                "msg" => "Alteração feita com sucesso.",
+                "update" => true
+            ]);
+        }
+        else
+        {
+            return response()->json([
+                "msg" => "Alteração não foi concluida.",
+                "update" => false
+            ]);
+        }
+    }
+
+
+
+
+    // ALTERAR SENHA
+    public function changePassord(Request $req)
+    {
+        $id_user = $req->id_user;
+
+        $email = User::where("id", $id_user)->update([
+            "password" => bcrypt($req->password)
+        ]);
+
+        if($email)
+        {
+            return response()->json([
+                "msg" => "Alteração feita com sucesso.",
+                "update" => true
+            ]);
+        }
+        else
+        {
+            return response()->json([
+                "msg" => "Alteração não foi concluida.",
+                "update" => false
+            ]);
+        }
+    }
 
 
     // // CONFIRMAR DOIS FATORES POR E-MAIL
