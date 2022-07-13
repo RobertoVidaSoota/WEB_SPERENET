@@ -23,9 +23,18 @@ class Account extends Controller
     {
         $userInfoAc = User::with("infoPessoais", "endereco")->find($id);
 
-        return response()->json([
-            "data" => $userInfoAc
-        ]);
+        if($userInfoAc)
+        {
+            return response()->json([
+                "data" => $userInfoAc
+            ]); 
+        }
+        else
+        {
+            return response()->json([
+                "msg" => "Usuário não encontrado"
+            ]);
+        }
     }
 
 
