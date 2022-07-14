@@ -116,15 +116,15 @@ class Account extends Controller
 
 
     // ALTERAR SENHA
-    public function changePassord(Request $req)
+    public function changePassword(Request $req)
     {
         $id_user = $req->id_user;
 
-        $email = User::where("id", $id_user)->update([
+        $password = User::where("id", $id_user)->update([
             "password" => bcrypt($req->password)
         ]);
 
-        if($email)
+        if($password)
         {
             return response()->json([
                 "msg" => "Alteração feita com sucesso.",
@@ -171,6 +171,35 @@ class Account extends Controller
 
 
 
+    // BUSCAR PREFERÊNCIAS DE NOTIFICAÇÃO
+    public function getUserNotification(Request $req)
+    {
+        $id_user = $req->id_user;
+
+        $notifications = Notificacoes::where("fk_id_usuario", "=", $id_user)
+            ->get();
+
+
+        if($notifications)
+        {
+            return response()->json([
+                "msg" => "Consulta feita com sucesso.",
+                "data" => $notifications,
+                "get" => true
+            ]);
+        }
+        else
+        {
+            return response()->json([
+                "msg" => "Erro para consultar as notificações.",
+                "get" => true
+            ]);
+        }
+    }
+
+
+
+
     // ALTERAR PREFERÊNCIAS DE NOTIFICAÇÃO
     public function changeUserNotification(Request $req)
     {
@@ -189,13 +218,15 @@ class Account extends Controller
         if($notifications)
         {
             return response()->json([
-                "msg" => "Alteração feita com sucesso."
+                "msg" => "Alteração feita com sucesso.",
+                "update" => true
             ]);
         }
         else
         {
             return response()->json([
-                "msg" => "Erro para fazer a alteração."
+                "msg" => "Erro para fazer a alteração.",
+                "update" => true
             ]);
         }
     }
