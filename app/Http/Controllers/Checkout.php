@@ -150,13 +150,13 @@ class Checkout extends Controller
                 ->select("carrinho.id", "carrinho.quantidade_produto",
                 "carrinho.fk_id_produto", "carrinho.fk_id_compras",
                 "produto.nome_produto", "produto.preco_produto",
-                "produto.link_imagem")
+                "produto.link_imagem", "compras.local_entrega", "compras.local_atual", "compras.status", "compras.fk_id_usuario", "compras.created_at")
                 ->join("compras", "compras.id", "carrinho.fk_id_compras")
                 ->join("produto", "produto.id", "carrinho.fk_id_produto")
-                ->where("compras.fk_id_usuario" , "=", $user_id)
+                ->where("compras.id" , "=", $purchases->id)
                 ->get();
 
-            $purchases["produto"] = $products;
+            $purchases["produtos"] = $products;
         }
 
         if($purchases)
