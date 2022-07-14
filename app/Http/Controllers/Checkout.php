@@ -150,7 +150,9 @@ class Checkout extends Controller
                 ->select("carrinho.id", "carrinho.quantidade_produto",
                 "carrinho.fk_id_produto", "carrinho.fk_id_compras",
                 "produto.nome_produto", "produto.preco_produto",
-                "produto.link_imagem", "compras.local_entrega", "compras.local_atual", "compras.status", "compras.fk_id_usuario", "compras.data_hora_compra")
+                "produto.link_imagem", "compras.local_entrega", "compras.local_atual",
+                "compras.status", "compras.fk_id_usuario", "compras.data_hora_compra",
+                "compras.metodo_pagamento", "compras.link_boleto")
                 ->join("compras", "compras.id", "carrinho.fk_id_compras")
                 ->join("produto", "produto.id", "carrinho.fk_id_produto")
                 ->where("compras.id" , "=", $purchases[$i]->id)
