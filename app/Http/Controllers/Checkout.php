@@ -139,7 +139,7 @@ class Checkout extends Controller
     // LISTAR COMPRAS
     public function postPurchases(Request $req)
     {
-        $user_id = $req->user_id;
+        $user_id = $req->id_user;
 
         $purchases = Compras::where("fk_id_usuario", "=", $user_id)
             ->get();    
@@ -150,13 +150,13 @@ class Checkout extends Controller
                 ->select("carrinho.id", "carrinho.quantidade_produto",
                 "carrinho.fk_id_produto", "carrinho.fk_id_compras",
                 "produto.nome_produto", "produto.preco_produto",
-                "produto.link_imagem", "compras.local_entrega", "compras.local_atual", "compras.status", "compras.fk_id_usuario", "compras.created_at")
+                "produto.link_imagem", "compras.local_entrega", "compras.local_atual", "compras.status", "compras.fk_id_usuario", "compras.data_hora_compra")
                 ->join("compras", "compras.id", "carrinho.fk_id_compras")
                 ->join("produto", "produto.id", "carrinho.fk_id_produto")
-                ->where("compras.id" , "=", $purchases->id)
+                ->where("compras.id" , "=", $purchases[$i]->id)
                 ->get();
 
-            $purchases["produtos"] = $products;
+            $purchases[$i]["produtos"] = $products;
         }
 
         if($purchases)
