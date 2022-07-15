@@ -32,6 +32,7 @@ class Shop extends Controller
         }
     }
 
+    
 
 
     // PEGAR PRODUTOS POPULARES ( with = lado de muitos[n])
@@ -61,6 +62,38 @@ class Shop extends Controller
             ]);
         }
     }
+
+
+
+
+    // PEGAR MAIS PRODUTOS
+    public function getMoreProducts()
+    {
+        $productsMore = DB::select("
+            SELECT produto.*, format(avg(estrelas), 1) as media_estrelas,
+            count(comentarios.fk_id_produto) as quantidade_comentarios
+            FROM produto 
+            JOIN comentarios
+            ON produto.id = comentarios.fk_id_produto
+            GROUP BY produto.id, nome_produto, link_imagem, preco_produto,
+            descricao, created_at, updated_at
+            ORDER BY avg(estrelas) desc
+            LIMIT 3, 8;
+        ");
+
+        if($productsMore)
+        {
+            return response()->json([
+                "data" => $productsMore
+            ]);
+        }else
+        {
+            return response()->json([
+                "msg" => "Deu errado" 
+            ]);
+        }
+    }
+
 
 
 

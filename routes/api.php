@@ -86,6 +86,11 @@ Route::get("/get_pop_products", [
     Shop::class, "getPopProducts"
 ]);//
 
+// PRODUTOS POPULARES
+Route::get("/get_more_products", [
+    Shop::class, "getMoreProducts"
+]);//
+
 // PESQUISAR
 Route::post("/post_search", [
     Shop::class, "postSearch"
