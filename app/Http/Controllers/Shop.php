@@ -38,7 +38,7 @@ class Shop extends Controller
     public function getPopProducts()
     {
         $productsObj = DB::select("
-            SELECT produto.*, avg(estrelas) as media_estrelas,
+            SELECT produto.*, format(avg(estrelas), 1) as media_estrelas,
             count(comentarios.fk_id_produto) as quantidade_comentarios
             FROM produto 
             JOIN comentarios
