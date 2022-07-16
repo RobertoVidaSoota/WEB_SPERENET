@@ -106,6 +106,10 @@ Route::post("/post_page_product", [
     Shop::class, "postPageProduct"
 ]);//
 
+// POSTAR COMENTÁRIO
+Route::post("/post_coments", [
+    Shop::class, "postComents"
+]);//
 
 
 // ---------------- PAGAMENTO ----------------

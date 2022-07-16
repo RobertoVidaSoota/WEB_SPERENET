@@ -14,9 +14,17 @@ class Shop extends Controller
     // PEGAR NOVOS PRODUTOS
     public function getNewProducts()
     {
-        $products = Produto::orderBy("created_at", "desc")
-            ->limit(10)
-            ->get();
+        $products = DB::select("
+        SELECT produto.*, format(avg(estrelas), 1) as media_estrelas,
+        count(comentarios.fk_id_produto) as quantidade_comentarios
+        FROM produto 
+        JOIN comentarios
+        ON produto.id = comentarios.fk_id_produto
+        GROUP BY produto.id, nome_produto, link_imagem, preco_produto,
+        descricao, created_at, updated_at
+        ORDER BY produto.created_at desc
+        LIMIT 8;
+        ");
         
         if($products)
         {
@@ -160,8 +168,6 @@ class Shop extends Controller
     public function postPageProduct(Request $req)
     {
         $product_id = $req->product_id;
-        $products = Produto::where("id", $product_id)
-            ->get();
 
         $specifications = Especificacoes::where(
             "fk_id_produto", $product_id
@@ -176,12 +182,11 @@ class Shop extends Controller
             ->where("comentarios.fk_id_produto", "=", $product_id)
             ->get();
         
-        if($products)
+        if($coments)
         {
             return response()->json([
                 "msg" => "Deu certo",
                 "data" => [
-                    "produto" => $products,
                     "especificacoes" => $specifications,
                     "comentarios" => $coments
                 ]
@@ -190,6 +195,39 @@ class Shop extends Controller
         {
             return response()->json([
                 "msg" => "Deu errado" 
+            ]);
+        }
+    }
+
+
+
+
+    // POSTAR COMENTARIO SOBRE O PRODUTO
+    public function postComents(Request $req)
+    {
+        $id_user = $req->id_user;
+        $id_produto = $req->id_produto;
+        $comentario = [
+            "texto_comentario" => $req->comentario,
+            "estrelas" => $req->estrelas,
+            "resposta" => "N",
+            "fk_id_usuario" => $id_user,
+            "fk_id_produto" => $id_produto
+        ];
+
+        $inserirComaentario = Comentarios::create($comentario);
+
+        if($inserirComaentario)
+        {
+            return response()->json([
+                "msg" => "Comentário postado com sucesso.",
+                "comentario" => $comentario
+            ]);
+        }
+        else
+        {
+            return response()->json([
+                "msg" => "Comentário não foi postado."
             ]);
         }
     }
