@@ -13,13 +13,10 @@ class Comentarios extends Model
     protected $fillable = [
         "texto_comentario",
         "estrelas",
-        "resposta"
+        "resposta",
+        "fk_id_usuario",
+        "fk_id_produto"
     ];
-    protected $casts = [
-        "fk_id_usuario" => "int",
-        "fk_id_pruduto" => "int"
-    ];
-
 
 
     public function user()
