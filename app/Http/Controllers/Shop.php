@@ -179,7 +179,7 @@ class Shop extends Controller
             ->join("info_pessoais", "info_pessoais.fk_id_usuario", "=", 
             "comentarios.fk_id_usuario")
             ->select("users.id", "users.name", "users.profile_photo_path", 
-                "comentarios.estrelas", "comentarios.texto_comentario", 
+                "comentarios.estrelas", "comentarios.texto_comentario", "info_pessoais.nome_usuario",  
             )->orderBy("comentarios.id", "desc")
             ->where("comentarios.fk_id_produto", "=", $product_id)
             ->get();
