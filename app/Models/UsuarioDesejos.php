@@ -10,9 +10,9 @@ class UsuarioDesejos extends Model
     use HasFactory;
 
     protected $table = "usuario_desejos";
-    protected $casts = [
-        "fk_id_usuario" => "int",
-        "fk_id_produto" => "int"
+    protected $fillable = [
+        "fk_id_usuario",
+        "fk_id_produto"
     ];
 
 

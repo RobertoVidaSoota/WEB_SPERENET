@@ -11,6 +11,31 @@ use Illuminate\Support\Facades\DB;
 
 class Shop extends Controller
 {
+    // PEGAR UM PRODUTO
+    public function postOneProduct(Request $req)
+    {
+        $id_produto = $req->id_produto;
+
+        $produto = Produto::where("id", $id_produto)->get();
+
+        if($produto)
+        {   
+            return response()->json([
+                "msg" => "Deu certo",
+                "produto" => $produto
+            ]);
+        }
+        else
+        {
+            return response()->json([
+                "msg" => "Deu errado",
+            ]);
+        }
+    }
+
+
+
+
     // PEGAR NOVOS PRODUTOS
     public function getNewProducts()
     {
@@ -134,8 +159,9 @@ class Shop extends Controller
         $user_id = $req->user_id;
 
         $products = DB::select("
-            SELECT link_imagem, nome_produto, preco_produto,
-            avg(estrelas) as media_estrelas
+            SELECT usuario_desejos.id as id, link_imagem, nome_produto, preco_produto,
+            format(avg(estrelas), 1) as media_estrelas, produto.id as 
+            id_produto
             FROM produto
             JOIN users JOIN usuario_desejos JOIN comentarios
             ON users.id = usuario_desejos.fk_id_usuario
@@ -161,6 +187,98 @@ class Shop extends Controller
             ]);
         }
     }
+
+
+
+    // VERIFICAR SE O PRODUTO TA NA LISTA DE DESEJOS
+    public function checkWishlist(Request $req)
+    {
+        $id_produto = $req->id_produto;
+        $id_user = $req->id_user;
+
+        $produtoLista = UsuarioDesejos::where(
+            "fk_id_produto", $id_produto,
+        )
+        ->where(
+            "fk_id_usuario", $id_user
+        )
+        ->get();
+
+        if($produtoLista)
+        {
+            return response()->json([
+                "msg" => "Deu certo",
+                "produto" => $produtoLista
+            ]);
+        }
+        else
+        {
+            return response()->json([
+                "msg" => "Deu errado",
+            ]);
+        }
+    }
+
+
+
+
+    // ADICIONAR PRODUTOS DA LISTA DE DESEJOS
+    public function addWishlist(Request $req)
+    {
+        $id_produto = $req->id_produto;
+        $id_user = $req->id_user;
+
+        $wishList = UsuarioDesejos::create([
+            "fk_id_usuario" => $id_user,
+            "fk_id_produto" => $id_produto
+        ]);
+
+        if($wishList)
+        {
+            return response()->json([
+                "msg" => "Deu certo",
+                "data" => $wishList
+            ]);
+        }else
+        {
+            return response()->json([
+                "msg" => "Deu errado" 
+            ]);
+        }
+    }
+
+
+
+
+    // REMOVER PRODUTOS DA LISTA DE DESEJOS
+    public function removeWishlist(Request $req)
+    {
+        $id_produto = $req->id_produto;
+        $id_user = $req->id_user;
+
+        $idProdutoLista = UsuarioDesejos::where(
+            "fk_id_produto", $id_produto
+        )
+        ->where(
+            "fk_id_usuario", $id_user
+        )
+        ->get(); 
+        $wishList = UsuarioDesejos::destroy($idProdutoLista[0]->id);
+
+        if($wishList)
+        {
+            return response()->json([
+                "msg" => "Deu certo",
+                "data" => $wishList
+            ]);
+        }else
+        {
+            return response()->json([
+                "msg" => "Deu errado" 
+            ]);
+        }
+    }
+
 
 
 

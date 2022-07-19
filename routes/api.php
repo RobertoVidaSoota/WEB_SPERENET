@@ -74,7 +74,10 @@ Route::post("/post_get_user_notification", [
 
 // ---------------- LOJA ----------------
 
-
+// PEGAR UM PRODUTO
+Route::get("/post_one_product", [
+    Shop::class, "postOneProduct"
+]);
 
 // NOVOS PRODUTOS
 Route::get("/get_new_products", [
@@ -100,6 +103,21 @@ Route::post("/post_search", [
 Route::post("/post_wishlist", [
     Shop::class, "postWishlist"
 ]);//
+
+// ADICIONAR EM DESEJOS
+Route::post("/add_wishlist", [
+    Shop::class, "addWishlist"
+]);
+
+// REMOVER DESEJO
+Route::post("remove_wishlist", [
+    Shop::class, "removeWishlist"
+]);
+
+// VERIFICAR SE TA NOS DESEJOS
+Route::post("check_wishlist", [
+    Shop::class, "checkWishlist"
+]);
 
 // PÁGINA DO PRODUTO
 Route::post("/post_page_product", [
