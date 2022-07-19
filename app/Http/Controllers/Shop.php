@@ -171,7 +171,7 @@ class Shop extends Controller
             GROUP BY usuario_desejos.id, usuario_desejos.fk_id_produto,
             usuario_desejos.fk_id_usuario, usuario_desejos.created_at,
             usuario_desejos.updated_at, link_imagem, nome_produto, 
-            preco_produto;
+            preco_produto, produto.id;
         ");
         
         if($products)
