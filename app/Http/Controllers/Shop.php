@@ -143,14 +143,21 @@ class Shop extends Controller
     public function postSearch(Request $req)
     {
         $text = $req->text;
-        $products = Produto::where("nome_produto", "like", "%".$text."%")
+
+        $produto = DB::table("produto")
+            ->select("produto.*", DB::raw("format(avg(estrelas), 1) as media_estrelas"), DB::raw("count(comentarios.fk_id_produto) as quantidade_comentarios"))
+            ->join("comentarios", "produto.id" , "=", "comentarios.fk_id_produto")
+            ->where("produto.nome_produto", "like", $text."%")
+            ->limit(5)
+            ->groupBy("produto.id", "nome_produto", "link_imagem", "preco_produto",
+            "descricao", "created_at", "updated_at")
             ->get();
         
-        if($products)
+        if($produto)
         {
             return response()->json([
                 "msg" => "Deu certo",
-                "data" => $products
+                "data" => $produto
             ]);
         }else
         {
@@ -270,13 +277,13 @@ class Shop extends Controller
             fk_id_produto = ".$id_produto." and
             fk_id_usuario = ".$id_user.";
         ");
-        // $wishList = UsuarioDesejos::destroy($idProdutoLista[0]["id"]);
+        $wishList = UsuarioDesejos::destroy($idProdutoLista[0]->id);
 
-        if($idProdutoLista)
+        if($wishList)
         {
             return response()->json([
                 "msg" => "Deu certo",
-                "data" => $idProdutoLista
+                "data" => $wishList
             ]);
         }else
         {
