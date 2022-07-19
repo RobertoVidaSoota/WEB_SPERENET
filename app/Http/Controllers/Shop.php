@@ -272,7 +272,7 @@ class Shop extends Controller
             "fk_id_usuario", $id_user
         )
         ->get(); 
-        $wishList = UsuarioDesejos::destroy($idProdutoLista->id);
+        $wishList = UsuarioDesejos::destroy($idProdutoLista[0]["id"]);
 
         if($wishList)
         {
