@@ -265,20 +265,18 @@ class Shop extends Controller
         $id_produto = $req->id_produto;
         $id_user = $req->id_user;
 
-        $idProdutoLista = UsuarioDesejos::where(
-            "fk_id_produto", $id_produto
-        )
-        ->where(
-            "fk_id_usuario", $id_user
-        )
-        ->get(); 
-        $wishList = UsuarioDesejos::destroy($idProdutoLista[0]["id"]);
+        $idProdutoLista = DB::select("
+            SELECT * FROM usuario_desejos WHERE 
+            fk_id_produto = ".$id_produto." and
+            fk_id_usuario = ".$id_user.";
+        ");
+        // $wishList = UsuarioDesejos::destroy($idProdutoLista[0]["id"]);
 
-        if($wishList)
+        if($idProdutoLista)
         {
             return response()->json([
                 "msg" => "Deu certo",
-                "data" => $wishList
+                "data" => $idProdutoLista
             ]);
         }else
         {
