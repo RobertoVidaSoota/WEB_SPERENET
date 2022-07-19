@@ -16,7 +16,16 @@ class Shop extends Controller
     {
         $id_produto = $req->id_produto;
 
-        $produto = Produto::where("id", $id_produto)->get();
+        $produto = DB::select("
+            SELECT produto.*, format(avg(estrelas), 1) as media_estrelas,
+            count(comentarios.fk_id_produto) as quantidade_comentarios
+            FROM produto 
+            JOIN comentarios
+            ON produto.id = comentarios.fk_id_produto
+            WHERE produto.id = ".$id_produto."
+            GROUP BY produto.id, nome_produto, link_imagem, preco_produto,
+            descricao, created_at, updated_at;
+        ");
 
         if($produto)
         {   
@@ -263,7 +272,7 @@ class Shop extends Controller
             "fk_id_usuario", $id_user
         )
         ->get(); 
-        $wishList = UsuarioDesejos::destroy($idProdutoLista[0]->id);
+        $wishList = UsuarioDesejos::destroy($idProdutoLista->id);
 
         if($wishList)
         {

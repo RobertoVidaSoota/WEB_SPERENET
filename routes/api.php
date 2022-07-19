@@ -75,7 +75,7 @@ Route::post("/post_get_user_notification", [
 // ---------------- LOJA ----------------
 
 // PEGAR UM PRODUTO
-Route::get("/post_one_product", [
+Route::post("/post_one_product", [
     Shop::class, "postOneProduct"
 ]);
 
