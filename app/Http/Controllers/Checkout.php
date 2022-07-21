@@ -185,11 +185,4 @@ class Checkout extends Controller
         $cartao = $req->metodo_cartao;
     }
 
-
-
-    // REASTREAMENTO DE PRODUTO(TESTAR COM APP)
-    public function postTrackProduct(Request $req)
-    {
-        $user_id = $req->user_id;
-    }
 }

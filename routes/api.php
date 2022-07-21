@@ -157,7 +157,3 @@ Route::post("/post_final_payment", [
     Checkout::class, "finalPayment"
 ]);//
 
-// REASTREAMENTO DE PRODUTO (TESTAR COM O APP)
-Route::post("/post_track_product", [
-    Checkout::class, "postTrackProduct"
-]);

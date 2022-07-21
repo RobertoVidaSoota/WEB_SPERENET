@@ -59,4 +59,10 @@ class PaymentAPI extends Controller
     {
 
     }
+
+    // PAGAR UMA COBRANÇA
+    public function getOneCobranca()
+    {
+
+    }
 }
