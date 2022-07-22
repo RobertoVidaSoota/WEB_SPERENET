@@ -131,15 +131,39 @@ class Checkout extends Controller
     public function postAddCart(Request $req)
     {
         $user_id = $req->user_id;
-        $id_produto = $req->produto;
+        $id_produto = $req->id_produto;
 
+        $compras = Compras::create([
+            "valor_total" => "",
+            "metodo_pagamento" => "",
+            "link_boleto" => "",
+            "data_hora_compra" => "",
+            "status" => "carrinho",
+            "local_entrega" => "",
+            "local_atual" => "",
+            "fk_id_usuario" => $user_id,
+        ]);
         $carrinho = Carrinho::create([
             "quantidade_produto" => 1,
             "fk_id_produto" => $id_produto,
-            "fk_id_compras" => $user_id    
+            "fk_id_compras" => $compras[0]->id
         ]);
 
-        
+        if($carrinho && $compras)
+        {
+            return response()->json([
+                "msg" => "Deu certo",
+                "success" => true,
+                "id_compra" => $compras[0]->id
+            ]);
+        }
+        else
+        {
+            return response()->json([
+                "msg" => "Deu Errado",
+                "success" => false
+            ]);
+        }
     } 
 
 

@@ -136,6 +136,11 @@ Route::post("/post_purchases", [
     Checkout::class, "postPurchases"
 ]);
 
+// ADICIONAR PRODTO NO CARRINHO
+Route::post("/post_add_cart", [
+    Checkout::class, "postAddCart"
+]);
+
 // CARINHO DE COMPRA(TESTAR COM O APP)
 Route::post("/post_cart", [
     Checkout::class, "postCart"
