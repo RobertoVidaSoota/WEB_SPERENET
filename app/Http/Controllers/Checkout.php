@@ -132,29 +132,40 @@ class Checkout extends Controller
     {
         $user_id = $req->user_id;
         $id_produto = $req->id_produto;
+        
+        $carrinhoCheck = Compras::where("status", "carrinho")
+            ->where("fk_id_usuario", $user_id)
+            ->get();
+
+        if($carrinhoCheck && count($carrinhoCheck) == 1)
+        {
+            return response()->json([
+                "msg" => "Produto ja está no carrinho",
+                "carrinho" => "on",
+                "success" => false
+            ]);
+        }
 
         $compras = Compras::create([
-            "valor_total" => "",
-            "metodo_pagamento" => "",
-            "link_boleto" => "",
-            "data_hora_compra" => "",
+            "valor_total" => '0.00',
             "status" => "carrinho",
-            "local_entrega" => "",
-            "local_atual" => "",
             "fk_id_usuario" => $user_id,
         ]);
+        $compraCriada = Compras::where("status", "carrinho")
+            ->where("fk_id_usuario", $user_id)
+            ->get();
         $carrinho = Carrinho::create([
             "quantidade_produto" => 1,
             "fk_id_produto" => $id_produto,
-            "fk_id_compras" => $compras[0]->id
+            "fk_id_compras" => $compraCriada[0]->id
         ]);
 
-        if($carrinho && $compras)
+        if($carrinhoCheck && $compras && $compraCriada)
         {
             return response()->json([
                 "msg" => "Deu certo",
                 "success" => true,
-                "id_compra" => $compras[0]->id
+                "id_compra" => $compraCriada[0]->id
             ]);
         }
         else

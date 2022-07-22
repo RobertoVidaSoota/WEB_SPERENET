@@ -45,7 +45,7 @@ class AuthUser extends Controller
             ]
         );
 
-        if ($token && $user) 
+        if ($user && $token) 
         {
             $user[0]->password = "";
             return response()->json([

@@ -19,7 +19,7 @@ class Compras extends Model
         "status",
         "local_entrega",
         "local_atual",
-        "fk_id_usuario" => "int",
+        "fk_id_usuario"
     ];
 
 
