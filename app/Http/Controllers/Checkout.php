@@ -124,8 +124,45 @@ class Checkout extends Controller
 
 
     // -----------------------------------
-    // CARINHO DE COMPRA(TRAVADO)
+    // CARINHO DE COMPRA
     // -----------------------------------
+    
+    // ADICIONAR NO CARRINHO
+    public function postAddCart(Request $req)
+    {
+        $user_id = $req->user_id;
+        $id_produto = $req->produto;
+
+        $carrinho = Carrinho::create([
+            "quantidade_produto" => 1,
+            "fk_id_produto" => $id_produto,
+            "fk_id_compras" => $user_id    
+        ]);
+
+        
+    } 
+
+
+
+
+
+
+
+    // PEGAR PRODUTOS DO CARRINHO 
+    public function postChangeQuantityCart(Request $req)
+    {
+        $user_id = $req->user_id;
+        
+
+        $carrinho = DB::table("compras")
+            ->get();
+    }
+
+
+
+
+
+    // PEGAR PRODUTOS DO CARRINHO 
     public function postCart(Request $req)
     {
         $user_id = $req->user_id;
@@ -134,6 +171,8 @@ class Checkout extends Controller
         $carrinho = DB::table("compras")
             ->get();
     }
+
+
 
 
     // LISTAR COMPRAS
@@ -174,6 +213,7 @@ class Checkout extends Controller
             ]);
         }
     }
+
 
 
 

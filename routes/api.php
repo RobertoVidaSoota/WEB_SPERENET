@@ -147,7 +147,20 @@ Route::post("/post_pay_method", [
 ]);//
 
 
-// PEGAR SESSÃO DA TRANSAÇÃO
+// 
+// PAGAR COM ASAAS
+// 
+
+
+
+
+
+
+
+//
+// COM PAGSEGURO
+// 
+/*/ PEGAR SESSÃO DA TRANSAÇÃO
 Route::get("/get_session_pagseguro", [
     Checkout::class, "getSessionPagseguro"
 ]);//
@@ -155,5 +168,5 @@ Route::get("/get_session_pagseguro", [
 // CONFIRMAR PAGAMENTO
 Route::post("/post_final_payment", [
     Checkout::class, "finalPayment"
-]);//
+]);/*/
 
