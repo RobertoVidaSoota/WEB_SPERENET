@@ -146,7 +146,12 @@ Route::post("/post_verify_prod_chart", [
     Checkout::class, "postVerifyProdChart"
 ]);
 
-// CARINHO DE COMPRA(TESTAR COM O APP)
+// REMOVER DO CARRINHO
+Route::post("/post_remove_chart", [
+    Checkout::class, "postRemoveChart"
+]);
+
+// CARINHO DE COMPRA
 Route::post("/post_cart", [
     Checkout::class, "postCart"
 ]);

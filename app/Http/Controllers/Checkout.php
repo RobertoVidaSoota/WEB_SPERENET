@@ -140,6 +140,7 @@ class Checkout extends Controller
         if($carrinhoCheck && count($carrinhoCheck) == 1)
         {
             $produtoCarrinho = Carrinho::where("fk_id_produto", $id_produto)
+                ->where("fk_id_compras", $carrinhoCheck[0]->id)
                 ->get();
             if($produtoCarrinho && count($produtoCarrinho) == 1)
             {
@@ -159,21 +160,19 @@ class Checkout extends Controller
             ]);
         }
         
-        $compraCriada = Compras::where("status", "carrinho")
-            ->where("fk_id_usuario", $user_id)
-            ->get();
+
         $carrinho = Carrinho::create([
             "quantidade_produto" => 1,
             "fk_id_produto" => $id_produto,
-            "fk_id_compras" => $compraCriada[0]->id
+            "fk_id_compras" => $carrinhoCheck[0]->id
         ]);
 
-        if($carrinhoCheck && $compraCriada && $carrinho)
+        if($carrinhoCheck && $carrinho)
         {
             return response()->json([
                 "msg" => "Deu certo",
                 "success" => true,
-                "id_compra" => $compraCriada[0]->id
+                "id_compra" => $carrinhoCheck[0]->id
             ]);
         }
         else
@@ -216,6 +215,36 @@ class Checkout extends Controller
 
 
 
+    // REMOVER DO CARRINHO
+    public function postRemoveChart(Request $req)
+    {
+        $id_produto = $req->id_produto;
+        $id_compra = $req->id_compra;
+
+        $carrinhoId = Carrinho::where("fk_id_produto", $id_produto)
+            ->where("fk_id_compras", $id_compra)
+            ->get();
+        
+        $carrinho = Carrinho::destroy($carrinhoId[0]->id);
+        
+        if($carrinho)
+        {
+            return response()->json([
+                "msg" => "Deu certo",
+                "success" => true
+            ]);
+        }
+        else
+        {
+            return response()->json([
+                "msg" => "Deu errado",
+                "success" => false
+            ]);
+        }
+    }
+
+
+
 
     // PEGAR PRODUTOS DO CARRINHO 
     public function postChangeQuantityCart(Request $req)
@@ -234,11 +263,29 @@ class Checkout extends Controller
     // PEGAR PRODUTOS DO CARRINHO 
     public function postCart(Request $req)
     {
-        $user_id = $req->user_id;
-        
+        $user_id = $req->id_user;
 
-        $carrinho = DB::table("compras")
+        $carrinho = DB::table("carrinho")
+            ->select("carrinho.id", "carrinho.quantidade_produto", "carrinho.fk_id_produto", "carrinho.fk_id_compras", "produto.nome_produto", "produto.preco_produto", "produto.link_imagem", "compras.valor_total", "compras.metodo_pagamento", "compras.data_hora_compra", "compras.status", "compras.local_entrega", "compras.local_atual", "compras.fk_id_usuario", DB::raw("compras.id as id_compra"))
+            ->join("compras", "compras.id", "=", "carrinho.fk_id_compras")
+            ->join("produto", "produto.id", "=", "carrinho.fk_id_produto")
+            ->where("compras.fk_id_usuario", "=", $user_id)
+            ->where("compras.status", "=", "carrinho")
             ->get();
+        
+        if($carrinho && count($carrinho) == 1)
+        {
+            return response()->json([
+                "success" => true,
+                "carrinho" => $carrinho
+            ]);
+        }
+        else
+        {
+            return response()->json([
+                "success" => false
+            ]);
+        }
     }
 
 
