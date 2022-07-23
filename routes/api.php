@@ -141,6 +141,11 @@ Route::post("/post_add_cart", [
     Checkout::class, "postAddCart"
 ]);
 
+// VERIFICAR CARRINHO
+Route::post("/post_verify_prod_chart", [
+    Checkout::class, "postVerifyProdChart"
+]);
+
 // CARINHO DE COMPRA(TESTAR COM O APP)
 Route::post("/post_cart", [
     Checkout::class, "postCart"

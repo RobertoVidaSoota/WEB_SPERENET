@@ -139,18 +139,26 @@ class Checkout extends Controller
 
         if($carrinhoCheck && count($carrinhoCheck) == 1)
         {
-            return response()->json([
-                "msg" => "Produto ja está no carrinho",
-                "carrinho" => "on",
-                "success" => false
+            $produtoCarrinho = Carrinho::where("fk_id_produto", $id_produto)
+                ->get();
+            if($produtoCarrinho && count($produtoCarrinho) == 1)
+            {
+                return response()->json([
+                    "msg" => "Produto ja está no carrinho",
+                    "carrinho" => "on",
+                    "success" => false
+                ]);
+            }
+        }
+        else
+        {
+            $compras = Compras::create([
+                "valor_total" => '0.00',
+                "status" => "carrinho",
+                "fk_id_usuario" => $user_id,
             ]);
         }
-
-        $compras = Compras::create([
-            "valor_total" => '0.00',
-            "status" => "carrinho",
-            "fk_id_usuario" => $user_id,
-        ]);
+        
         $compraCriada = Compras::where("status", "carrinho")
             ->where("fk_id_usuario", $user_id)
             ->get();
@@ -160,7 +168,7 @@ class Checkout extends Controller
             "fk_id_compras" => $compraCriada[0]->id
         ]);
 
-        if($carrinhoCheck && $compras && $compraCriada)
+        if($carrinhoCheck && $compraCriada && $carrinho)
         {
             return response()->json([
                 "msg" => "Deu certo",
@@ -179,6 +187,32 @@ class Checkout extends Controller
 
 
 
+
+    // VERIFICAR CARRINHO
+    public function postVerifyProdChart(Request $req)
+    {
+        $id_produto = $req->id_produto;
+        $id_compra = $req->id_compra;
+
+        $produto = Carrinho::where("fk_id_produto", $id_produto)
+            ->where("fk_id_compras", $id_compra)
+            ->get();
+        
+        if($produto && count($produto) == 0)
+        {
+            return response()->json([
+                "msg" => "Deu certo",
+                "success" => true
+            ]);
+        }
+        else
+        {
+            return response()->json([
+                "msg" => "Deu errado",
+                "success" => false
+            ]);
+        }
+    }
 
 
 
