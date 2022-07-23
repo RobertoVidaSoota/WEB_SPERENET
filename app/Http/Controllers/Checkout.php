@@ -265,15 +265,18 @@ class Checkout extends Controller
     {
         $user_id = $req->id_user;
 
-        $carrinho = DB::table("carrinho")
-            ->select("carrinho.id", "carrinho.quantidade_produto", "carrinho.fk_id_produto", "carrinho.fk_id_compras", "produto.nome_produto", "produto.preco_produto", "produto.link_imagem", "compras.valor_total", "compras.metodo_pagamento", "compras.data_hora_compra", "compras.status", "compras.local_entrega", "compras.local_atual", "compras.fk_id_usuario", DB::raw("compras.id as id_compra"))
-            ->join("compras", "compras.id", "=", "carrinho.fk_id_compras")
-            ->join("produto", "produto.id", "=", "carrinho.fk_id_produto")
-            ->where("compras.fk_id_usuario", "=", $user_id)
-            ->where("compras.status", "=", "carrinho")
-            ->get();
+        $carrinho = DB::select("SELECT carrinho.id, carrinho.quantidade_produto, carrinho.fk_id_produto,	
+        carrinho.fk_id_compras, produto.nome_produto, produto.preco_produto,
+        produto.link_imagem, compras.valor_total, compras.metodo_pagamento, 
+        compras.data_hora_compra, compras.status, compras.local_entrega,compras.local_atual,
+        compras.fk_id_usuario, compras.id as id_compra
+        FROM produto
+        JOIN compras JOIN carrinho
+        ON compras.id = carrinho.fk_id_compras
+        ON produto.id = carrinho.fk_id_produto
+        WHERE compras.fk_id_usuario = '".$user_id."' and compras.status = 'carrinho';");
         
-        if($carrinho && count($carrinho) == 1)
+        if($carrinho && count($carrinho) > 0)
         {
             return response()->json([
                 "success" => true,
