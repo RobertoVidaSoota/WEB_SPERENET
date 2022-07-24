@@ -246,14 +246,51 @@ class Checkout extends Controller
 
 
 
-    // PEGAR PRODUTOS DO CARRINHO 
+    // MUDAR QUANTIDADE DO PRODUTO 
     public function postChangeQuantityCart(Request $req)
     {
-        $user_id = $req->user_id;
-        
+        $id_produto = $req->id_produto;
+        $id_compra = $req->id_compra;
+        $direcao = $req->direcao;
 
-        $carrinho = DB::table("compras")
+        $number = Carrinho::where("fk_id_compras", $id_compra)
+            ->where("fk_id_produto", $id_produto)
             ->get();
+        
+        if($direcao === "frente")
+        {
+            $alterar = Carrinho::where("fk_id_compras", $id_compra)
+            ->where("fk_id_produto", $id_produto)
+            ->update([
+                "quantidade_produto" => $number[0]->quantidade_produto + 1
+            ]);
+        }
+        elseif($direcao === "traz" && $number[0]->quantidade_produto > 0)
+        {
+            $alterar = Carrinho::where("fk_id_compras", $id_compra)
+            ->where("fk_id_produto", $id_produto)
+            ->update([
+                "quantidade_produto" => $number[0]->quantidade_produto -1
+            ]);
+        }
+        
+        
+        if($alterar)
+        {
+            return response()->json([
+                "msg" => "Deu certo",
+                "success" => true,
+                "valor" => $alterar
+            ]);
+        }
+        else
+        {
+            return response()->json([
+                "msg" => "Deu errado",
+                "success" => false
+            ]);
+        }
+        
     }
 
 
@@ -339,9 +376,7 @@ class Checkout extends Controller
     // MÉTODO DE PAGAMENTO(TESTAR COM APP)
     public function postPayMethod(Request $req)
     {
-        $pix = $req->metodo_pix;
-        $boleto = $req->metodo_boleto;
-        $cartao = $req->metodo_cartao;
+        $metodo = $req->metodo;
     }
 
 }

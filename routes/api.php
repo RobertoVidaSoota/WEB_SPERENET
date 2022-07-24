@@ -134,27 +134,32 @@ Route::post("/post_coments", [
 
 Route::post("/post_purchases", [
     Checkout::class, "postPurchases"
-]);
+]);//
 
 // ADICIONAR PRODTO NO CARRINHO
 Route::post("/post_add_cart", [
     Checkout::class, "postAddCart"
-]);
+]);//
 
 // VERIFICAR CARRINHO
 Route::post("/post_verify_prod_chart", [
     Checkout::class, "postVerifyProdChart"
-]);
+]);//
 
 // REMOVER DO CARRINHO
 Route::post("/post_remove_chart", [
     Checkout::class, "postRemoveChart"
+]);//
+
+// MUDAR QUANTIDADE DO PRODUTO
+Route::post("/post_change_quantity_cart", [
+    Checkout::class, "postChangeQuantityCart"
 ]);
 
 // CARINHO DE COMPRA
 Route::post("/post_cart", [
     Checkout::class, "postCart"
-]);
+]);//
 
 // MÉTODO DE PAGAMENTO
 Route::post("/post_pay_method", [
