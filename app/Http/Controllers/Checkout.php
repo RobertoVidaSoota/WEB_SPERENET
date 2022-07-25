@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Carrinho;
 use App\Models\Compras;
+use App\Models\Endereco;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use PagSeguro\Configuration\Configure;
@@ -373,10 +374,68 @@ class Checkout extends Controller
 
 
 
+    // INICIAR O PAGAMENTO
+    public function postPayment(Request $req)
+    {
+        $id_compra = $req->id_compra;
+        $id_user = $req->id_user;
+        $valorTotal = $req->valorTotal;
+
+        $endereco = Endereco::where("fk_id_usuario", $id_user)
+            ->get();
+        $entrega = $endereco[0]->rua.", ".
+            $endereco[0]->bairro.", ".
+            $endereco[0]->cidade.", ".
+            $endereco[0]->uf;
+        $payment = Compras::where("id", $id_compra)
+            ->where("fk_id_usuario", $id_user)
+            ->update([
+                "valor_total" => $valorTotal,
+                "local_entrega" => $entrega
+            ]);
+
+        if($payment && $endereco)
+        {
+            return response()->json([
+                "success" => true,
+            ]);
+        }
+        else
+        {
+            return response()->json([
+                "success" => true,
+                "msg", "Erro no servidor"
+            ]);
+        }
+    }
+
+
+
+
     // MÉTODO DE PAGAMENTO(TESTAR COM APP)
     public function postPayMethod(Request $req)
     {
         $metodo = $req->metodo;
+        $id_compra = $req->id_compra;
+
+        $payment = Compras::where("id", $id_compra)
+            ->update([
+                "metodo_pagamento" => $metodo
+            ]);
+
+        if($payment)
+        {
+            return response()->json([
+                "success" => true,
+            ]);
+        }
+        else
+        {
+            return response()->json([
+                "success" => true,
+                "msg", "Erro no servidor"
+            ]);
+        }
     }
 
 }

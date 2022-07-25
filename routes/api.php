@@ -154,12 +154,17 @@ Route::post("/post_remove_chart", [
 // MUDAR QUANTIDADE DO PRODUTO
 Route::post("/post_change_quantity_cart", [
     Checkout::class, "postChangeQuantityCart"
-]);
+]);//
 
 // CARINHO DE COMPRA
 Route::post("/post_cart", [
     Checkout::class, "postCart"
 ]);//
+
+// INICIAR PAGAMENTO
+Route::post("/post_payment", [
+    Checkout::class, "postPayment"
+]);
 
 // MÉTODO DE PAGAMENTO
 Route::post("/post_pay_method", [
