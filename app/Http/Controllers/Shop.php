@@ -58,9 +58,9 @@ class Shop extends Controller
         ON produto.id = comentarios.fk_id_produto
         AND produto.id = produto_categoria.fk_id_produto
         AND categoria.id = produto_categoria.fk_id_categoria
-        WHERE categoria.nome_categoria = 'Headsets'
+        WHERE categoria.nome_categoria = '".$categoria."'
         GROUP BY produto.id, nome_produto, link_imagem, preco_produto,
-        descricao, created_at, updated_at
+        descricao, created_at, updated_at, categoria.nome_categoria
         ORDER BY produto.id desc
         LIMIT 7;");
 
