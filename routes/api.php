@@ -77,6 +77,11 @@ Route::post("/post_get_user_notification", [
 // PEGAR UM PRODUTO
 Route::post("/post_one_product", [
     Shop::class, "postOneProduct"
+]);//
+
+// PEGAR PRODUTOS PORCATEGORIA
+Route::post("/post_catogory_product", [
+    Shop::class, "postCatogoryProduct"
 ]);
 
 // NOVOS PRODUTOS

@@ -45,6 +45,44 @@ class Shop extends Controller
 
 
 
+    // PEGAR PRODUTOS POR CATEGORIA
+    public function postCatogoryProduct(Request $req)
+    {
+        $categoria = $req->categoria;
+
+        $produto = DB::select("SELECT produto.*, format(avg(estrelas), 1) as media_estrelas,
+        count(comentarios.fk_id_produto) as quantidade_comentarios,
+        categoria.nome_categoria
+        FROM produto 
+        JOIN comentarios JOIN categoria JOIN produto_categoria
+        ON produto.id = comentarios.fk_id_produto
+        AND produto.id = produto_categoria.fk_id_produto
+        AND categoria.id = produto_categoria.fk_id_categoria
+        WHERE categoria.nome_categoria = 'Headsets'
+        GROUP BY produto.id, nome_produto, link_imagem, preco_produto,
+        descricao, created_at, updated_at
+        ORDER BY produto.id desc
+        LIMIT 7;");
+
+        if($produto)
+        {   
+            return response()->json([
+                "success" => true,
+                "produto" => $produto
+            ]);
+        }
+        else
+        {
+            return response()->json([
+                "msg" => "Deu errado",
+                "success" => true,
+            ]);
+        }
+    }
+
+
+
+
     // PEGAR NOVOS PRODUTOS
     public function getNewProducts()
     {
