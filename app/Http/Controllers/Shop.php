@@ -74,8 +74,7 @@ class Shop extends Controller
         else
         {
             return response()->json([
-                "msg" => "Deu errado",
-                "success" => true,
+                "success" => false,
             ]);
         }
     }
