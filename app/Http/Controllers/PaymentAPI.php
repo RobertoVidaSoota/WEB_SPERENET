@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Compras;
 use App\Models\Endereco;
 use App\Models\InfoPessoais;
 use App\Models\User;
@@ -14,15 +15,27 @@ class PaymentAPI extends Controller
     // SEQUENCIA DA TRANSAÇÃO
     public function transaction(Request $req)
     {
+        // PEGA DO BANCO DE DADOS
         $verIdAsaas = $this->getIdClient($req->id_user);
 
         if($verIdAsaas["success"] === false)
         {
+            // CRIA CLIENTE NO ASAAS E SETA NO BANCO
             $criarCliente = $this->createClient($req->id_user);
+            
+            return response()->json([
+                "success" => true,
+                "data" => $criarCliente
+            ]); 
         }
         else
         {
-            $pegarClienteCriado = $this->getOneClient($verIdAsaas["id_asaas"]);
+            return response()->json([
+                "success" => true,
+                "data" => $verIdAsaas
+            ]);
+            // PEGA CLIENTE REGISTRADO NO ASAAS
+            // $pegarClienteCriado = $this->getOneClient($verIdAsaas["id_asaas"]);
         }
         
     }
@@ -63,7 +76,7 @@ class PaymentAPI extends Controller
                 $cliente
             ]);
 
-        return $registerID;
+        return $registerID ? $registerID : "";
     }
 
 
@@ -90,6 +103,28 @@ class PaymentAPI extends Controller
 
 
 
+    // PEGAR A COMPRA ATUAL DO USUÁRIO
+    public function getIdCompra($id_user)
+    {
+        $compra = Compras::where("fk_id_usuario", $id_user)
+            ->where("status", "carrinho");
+
+        if($compra && count($compra) > 0)
+        {
+            return [
+                "success" => true,
+                "compra" => $compra
+            ];
+        }
+        else
+        {
+            return [
+                "success" => false
+            ];
+        }
+    }
+
+
 
     // LISTAR UM CLIENTE DO ASSAS
     public function getOneClient($id_cliente)
@@ -109,14 +144,6 @@ class PaymentAPI extends Controller
                 "success" => false
             ];
         }
-    }
-
-
-
-    // LISTAR CLIENTES DO ASSAS
-    public function listClient()
-    {
-
     }
 
 
@@ -167,13 +194,6 @@ class PaymentAPI extends Controller
 
     }
 
-
-
-    // PAGAR UMA COBRANÇA
-    public function getOneCobranca()
-    {
-
-    }
 
 
     // MANDAR REQUISIÇÃO PRO ASAAS
