@@ -177,10 +177,11 @@ Route::post("/post_pay_method", [
 ]);//
 
 
-// 
-// PAGAR COM ASAAS
-// 
 
+// PAGAR COM ASAAS
+Route::post("/post_pay_transaction", [
+    Checkout::class, "postPayTransaction"
+]);//
 
 
 
