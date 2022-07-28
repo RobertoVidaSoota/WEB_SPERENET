@@ -16,11 +16,11 @@ class PaymentAPI extends Controller
     public function postPayTransaction(Request $req)
     {
         // PEGA DO BANCO DE DADOS
-        // $verIdAsaas = $this->getIdClient($req->id_user);
+        $verIdAsaas = $this->getIdClient($req->id_user);
 
         return response()->json([
             "success" => true,
-            "data" => "ok"
+            "data" => $verIdAsaas
         ]);
 
         // if($verIdAsaas["success"] === false)
@@ -101,7 +101,8 @@ class PaymentAPI extends Controller
     // VERIFICAR O ID ASSAS DO USUÁRIO
     public function getIdClient($id_user)
     {
-        $id = User::where("id", $id_user);
+        $id = User::where("id", $id_user)
+            ->get();
 
         if(!$id && $id[0]->id_asaas == "")
         {
@@ -124,7 +125,8 @@ class PaymentAPI extends Controller
     public function getIdCompra($id_user)
     {
         $compra = Compras::where("fk_id_usuario", $id_user)
-            ->where("status", "carrinho");
+            ->where("status", "carrinho")
+            ->get();
 
         if($compra && count($compra) > 0)
         {
