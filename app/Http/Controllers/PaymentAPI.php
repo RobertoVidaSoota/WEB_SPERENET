@@ -68,6 +68,8 @@ class PaymentAPI extends Controller
             "stateInscription" => "",
             "observations" => ""
             ];
+
+        $data = json_encode($data);
         
         if($user && $infoPessoais && $endereco)
         {
@@ -82,8 +84,7 @@ class PaymentAPI extends Controller
             }
         
         }
-        
-
+        // dd($data);
         return [
             "resgister" => $registerID,
             "reponseUserAsaas" => $cliente
