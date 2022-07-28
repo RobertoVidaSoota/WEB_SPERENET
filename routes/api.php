@@ -7,6 +7,7 @@ use App\Http\Controllers\
     Account,
     AuthUser,
     Checkout,
+    PaymentAPI,
     Shop
 };
 
@@ -180,7 +181,7 @@ Route::post("/post_pay_method", [
 
 // PAGAR COM ASAAS
 Route::post("/post_pay_transaction", [
-    Checkout::class, "postPayTransaction"
+    PaymentAPI::class, "postPayTransaction"
 ]);//
 
 

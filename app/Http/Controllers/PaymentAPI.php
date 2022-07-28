@@ -13,7 +13,7 @@ class PaymentAPI extends Controller
     private $asaasURL = "https://sandbox.asaas.com/api/v3/";
 
     // SEQUENCIA DA TRANSAÇÃO
-    public function transaction(Request $req)
+    public function postPayTransaction(Request $req)
     {
         // PEGA DO BANCO DE DADOS
         $verIdAsaas = $this->getIdClient($req->id_user);
