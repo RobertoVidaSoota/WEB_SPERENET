@@ -15,19 +15,84 @@ class PaymentAPI extends Controller
     // SEQUENCIA DA TRANSAÇÃO
     public function postPayTransaction(Request $req)
     {
+        $id_user = $req->id_user;
         // PEGA DO BANCO DE DADOS
         $verIdAsaas = $this->getIdClient($req->id_user);
 
         if($verIdAsaas["success"] === false)
         {
             // CRIA CLIENTE NO ASAAS E SETA NO BANCO
-            $criarCliente = $this->createClient($req->id_user);
-            
+            // $criarCliente = $this->createClient($req->id_user);
+            $user = User::where("id", $id_user)
+                ->get();
+            $infoPessoais = InfoPessoais::where("fk_id_usuario", $id_user)
+                ->get();
+            $endereco = Endereco::where("fk_id_usuario", $id_user)
+                ->get();
 
-            return response()->json([
-                "success" => true,
-                "data" => $criarCliente
-            ]); 
+            $data = [
+                "name" => $infoPessoais[0]->nome_usuario,
+                "email" => $user[0]->email,
+                "phone" => $infoPessoais[0]->telefone,
+                "mobilePhone" => $infoPessoais[0]->telefone,
+                "cpfCnpj" => $infoPessoais[0]->cpf,
+                "postalCode" => $endereco[0]->cep,
+                "address" => $endereco[0]->rua,
+                "addressNumber" => $endereco[0]->numero,
+                "complement" => "",
+                "province" => $endereco[0]->bairro,
+                "externalReference" => $id_user,
+                "notificationDisabled" => false,
+                "additionalEmails" => "",
+                "municipalInscription" => "",
+                "stateInscription" => "",
+                "observations" => ""
+                ];
+
+            // $data = json_encode($data);
+            
+            if($user && $infoPessoais && $endereco)
+            {
+                $curl = curl_init();
+
+                $headers = [
+                    "Content-Type" => "application/json",
+                    "access_token" => env('ASAAS_TOKEN')
+                ];
+
+                
+                curl_setopt_array($curl, [
+                    CURLOPT_URL => $this->asaasURL.'customers',
+                    CURLOPT_CUSTOMREQUEST => 'POST',
+                    CURLOPT_RETURNTRANSFER => true,
+                    CURLOPT_HTTPHEADER => $headers,
+                    CURLOPT_POSTFIELDS => $data
+                ]);
+
+                $response = curl_exec($curl);
+
+                curl_close($curl);
+
+                if($response)
+                {
+                    return response()->json([
+                        "success" => true,
+                        "data" => $response
+                    ]);
+                }
+                else
+                {
+                    return response()->json([
+                        "success" => false
+                    ]);
+                }
+                
+            }
+
+            // return response()->json([
+            //     "success" => true,
+            //     "data" => $criarCliente
+            // ]); 
         }
         else
         {
@@ -40,6 +105,10 @@ class PaymentAPI extends Controller
         }
         
     }
+
+
+
+
 
 
 
