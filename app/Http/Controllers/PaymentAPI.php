@@ -84,7 +84,10 @@ class PaymentAPI extends Controller
         }
         
 
-        return $registerID ? $registerID : "";
+        return [
+            "resgister" => $registerID,
+            "reponseUserAsaas" => $cliente
+        ];
     }
 
 
@@ -239,18 +242,10 @@ class PaymentAPI extends Controller
 
         curl_close($curl);
 
-        if($response)
-        {
-            return [
-                "success" => true,
-                "data" => $response
-            ];
-        }
-        else
-        {
-            return [
-                "success" => false
-            ];
-        }
+       
+        return [
+            "success" => true,
+            "data" => $response
+        ];
     }
 }
