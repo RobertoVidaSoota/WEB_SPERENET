@@ -104,7 +104,7 @@ class PaymentAPI extends Controller
         $id = User::where("id", $id_user)
             ->get();
 
-        if(!$id && $id[0]->id_asaas == "")
+        if(!$id && $id->id_asaas == "")
         {
             return [
                 "success" => false
