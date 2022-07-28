@@ -51,7 +51,7 @@ class PaymentAPI extends Controller
         $endereco = Endereco::where("fk_id_usuario", $id_user);
 
         $data = [
-            "name" => "Marcelo Almeida",
+            "name" => "",
             "email" => "marcelo.almeida@gmail.com",
             "phone" => "4738010919",
             "mobilePhone" => "4799376637",
@@ -68,15 +68,23 @@ class PaymentAPI extends Controller
             "stateInscription" => "646681195275",
             "observations" => "ótimo pagador, nenhum problema até o momento"
             ];
+        
+        if($user && $infoPessoais && $endereco)
+        {
+            // $cliente = $this->requestAsaas("customers", $data, "POST");
 
-        $cliente = $this->requestAsaas("customers", $data, "POST");
+            // if($cliente && $cliente->success === true)
+            // {
+            //     $registerID = User::where("id", $id_user)
+            //     ->update([
+            //         "id_asaas" => $cliente->data->id
+            //     ]);
+            // }
+        
+        }
+        
 
-        $registerID = User::where("id", $id_user)
-            ->update([
-                $cliente
-            ]);
-
-        return $registerID ? $registerID : "";
+        // return $registerID ? $registerID : "";
     }
 
 
@@ -231,6 +239,10 @@ class PaymentAPI extends Controller
 
         curl_close($curl);
 
-        return $response ? $response : "";
+        
+        return [
+            "data" => $response
+        ];
+        
     }
 }
