@@ -71,24 +71,24 @@ class PaymentAPI extends Controller
 
         $data = json_encode($data);
         
-        if($user && $infoPessoais && $endereco)
-        {
-            $cliente = $this->requestAsaas("customers", $data, "POST");
+        // if($user && $infoPessoais && $endereco)
+        // {
+        //     $cliente = $this->requestAsaas("customers", $data, "POST");
 
-            if($cliente && $cliente["success"] === true)
-            {
-                $registerID = User::where("id", $id_user)
-                ->update([
-                    "id_asaas" => $cliente["data"]["id"]
-                ]);
-            }
+        //     if($cliente && $cliente["success"] === true)
+        //     {
+        //         $registerID = User::where("id", $id_user)
+        //         ->update([
+        //             "id_asaas" => $cliente["data"]["id"]
+        //         ]);
+        //     }
         
-        }
-        // dd($data);
-        return [
-            "resgister" => $registerID,
-            "reponseUserAsaas" => $cliente
-        ];
+        // }
+        dd($data);
+        // return [
+        //     "resgister" => $registerID,
+        //     "reponseUserAsaas" => $cliente
+        // ];
     }
 
 
@@ -141,7 +141,11 @@ class PaymentAPI extends Controller
     // LISTAR UM CLIENTE DO ASSAS
     public function getOneClient($id_cliente)
     {
-        $cliente = $this->requestAsaas("", $id_cliente, 'GET');
+        $cliente = $this->requestAsaas(
+            "customers".$id_cliente, 
+            $id_cliente, 
+            'GET'
+        );
 
         if($cliente)
         {
