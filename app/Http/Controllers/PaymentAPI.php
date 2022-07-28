@@ -23,6 +23,7 @@ class PaymentAPI extends Controller
             // CRIA CLIENTE NO ASAAS E SETA NO BANCO
             $criarCliente = $this->createClient($req->id_user);
             
+
             return response()->json([
                 "success" => true,
                 "data" => $criarCliente
@@ -51,7 +52,7 @@ class PaymentAPI extends Controller
         $infoPessoais = InfoPessoais::where("fk_id_usuario", $id_user)
             ->get();
         $endereco = Endereco::where("fk_id_usuario", $id_user)
-            ->get();;
+            ->get();
 
         $data = [
             "name" => $infoPessoais[0]->nome_usuario,
