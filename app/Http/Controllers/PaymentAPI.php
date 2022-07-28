@@ -18,30 +18,25 @@ class PaymentAPI extends Controller
         // PEGA DO BANCO DE DADOS
         $verIdAsaas = $this->getIdClient($req->id_user);
 
-        return response()->json([
-            "success" => true,
-            "data" => $verIdAsaas
-        ]);
-
-        // if($verIdAsaas["success"] === false)
-        // {
-        //     // CRIA CLIENTE NO ASAAS E SETA NO BANCO
-        //     $criarCliente = $this->createClient($req->id_user);
+        if($verIdAsaas["success"] === false)
+        {
+            // CRIA CLIENTE NO ASAAS E SETA NO BANCO
+            $criarCliente = $this->createClient($req->id_user);
             
-        //     return response()->json([
-        //         "success" => true,
-        //         "data" => $criarCliente
-        //     ]); 
-        // }
-        // else
-        // {
-        //     return response()->json([
-        //         "success" => true,
-        //         "data" => $verIdAsaas
-        //     ]);
-        //     // PEGA CLIENTE REGISTRADO NO ASAAS
-        //     // $pegarClienteCriado = $this->getOneClient($verIdAsaas["id_asaas"]);
-        // }
+            return response()->json([
+                "success" => true,
+                "data" => $criarCliente
+            ]); 
+        }
+        else
+        {
+            return response()->json([
+                "success" => true,
+                "data" => $verIdAsaas
+            ]);
+            // PEGA CLIENTE REGISTRADO NO ASAAS
+            // $pegarClienteCriado = $this->getOneClient($verIdAsaas["id_asaas"]);
+        }
         
     }
 
@@ -77,26 +72,26 @@ class PaymentAPI extends Controller
             "observations" => ""
             ];
 
-        $data = json_encode($data);
+        // $data = json_encode($data);
         
-        // if($user && $infoPessoais && $endereco)
-        // {
-        //     $cliente = $this->requestAsaas("customers", $data, "POST");
+        if($user && $infoPessoais && $endereco)
+        {
+            $cliente = $this->requestAsaas("customers", $data, "POST");
 
-        //     if($cliente && $cliente["success"] === true)
-        //     {
-        //         $registerID = User::where("id", $id_user)
-        //         ->update([
-        //             "id_asaas" => $cliente["data"]["id"]
-        //         ]);
-        //     }
+            if($cliente && $cliente["success"] === true)
+            {
+                $registerID = User::where("id", $id_user)
+                ->update([
+                    "id_asaas" => $cliente["data"]["id"]
+                ]);
+            }
         
-        // }
-        dd($data);
-        // return [
-        //     "resgister" => $registerID,
-        //     "reponseUserAsaas" => $cliente
-        // ];
+        }
+        
+        return [
+            "resgister" => $registerID,
+            "reponseUserAsaas" => $cliente
+        ];
     }
 
 
