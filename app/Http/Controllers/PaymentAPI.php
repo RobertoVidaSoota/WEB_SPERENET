@@ -16,11 +16,11 @@ class PaymentAPI extends Controller
     public function postPayTransaction(Request $req)
     {
         // PEGA DO BANCO DE DADOS
-        $verIdAsaas = $this->getIdClient($req->id_user);
+        // $verIdAsaas = $this->getIdClient($req->id_user);
 
         return response()->json([
             "success" => true,
-            "data" => $verIdAsaas
+            "data" => "ok"
         ]);
 
         // if($verIdAsaas["success"] === false)
