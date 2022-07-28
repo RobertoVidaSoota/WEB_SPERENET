@@ -51,35 +51,35 @@ class PaymentAPI extends Controller
         $endereco = Endereco::where("fk_id_usuario", $id_user);
 
         $data = [
-            "name" => "",
-            "email" => "marcelo.almeida@gmail.com",
-            "phone" => "4738010919",
-            "mobilePhone" => "4799376637",
-            "cpfCnpj" => "24971563792",
-            "postalCode" => "01310-000",
-            "address" => "Av. Paulista",
-            "addressNumber" => "150",
-            "complement" => "Sala 201",
-            "province" => "Centro",
-            "externalReference" => "12987382",
+            "name" => $infoPessoais[0]->nome_usuario,
+            "email" => $user[0]->email,
+            "phone" => $infoPessoais[0]->telefone,
+            "mobilePhone" => $infoPessoais[0]->telefone,
+            "cpfCnpj" => $infoPessoais[0]->cpf,
+            "postalCode" => $endereco[0]->cep,
+            "address" => $endereco[0]->rua,
+            "addressNumber" => $endereco[0]->numero,
+            "complement" => "",
+            "province" => $endereco[0]->bairro,
+            "externalReference" => $id_user,
             "notificationDisabled" => false,
-            "additionalEmails" => "marcelo.almeida2@gmail.com,marcelo.almeida3@gmail.com",
-            "municipalInscription" => "46683695908",
-            "stateInscription" => "646681195275",
-            "observations" => "ótimo pagador, nenhum problema até o momento"
+            "additionalEmails" => "",
+            "municipalInscription" => "",
+            "stateInscription" => "",
+            "observations" => ""
             ];
         
         if($user && $infoPessoais && $endereco)
         {
-            // $cliente = $this->requestAsaas("customers", $data, "POST");
+            $cliente = $this->requestAsaas("customers", $data, "POST");
 
-            // if($cliente && $cliente->success === true)
-            // {
-            //     $registerID = User::where("id", $id_user)
-            //     ->update([
-            //         "id_asaas" => $cliente->data->id
-            //     ]);
-            // }
+            if($cliente && $cliente["success"] === true)
+            {
+                $registerID = User::where("id", $id_user)
+                ->update([
+                    "id_asaas" => $cliente["data"]["id"]
+                ]);
+            }
         
         }
         
@@ -239,10 +239,18 @@ class PaymentAPI extends Controller
 
         curl_close($curl);
 
-        
-        return [
-            "data" => $response
-        ];
-        
+        if($response)
+        {
+            return [
+                "success" => true,
+                "data" => $response
+            ];
+        }
+        else
+        {
+            return [
+                "success" => false
+            ];
+        }
     }
 }
