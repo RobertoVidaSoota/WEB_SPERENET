@@ -18,25 +18,30 @@ class PaymentAPI extends Controller
         // PEGA DO BANCO DE DADOS
         $verIdAsaas = $this->getIdClient($req->id_user);
 
-        if($verIdAsaas["success"] === false)
-        {
-            // CRIA CLIENTE NO ASAAS E SETA NO BANCO
-            $criarCliente = $this->createClient($req->id_user);
+        return response()->json([
+            "success" => true,
+            "data" => $verIdAsaas
+        ]);
+
+        // if($verIdAsaas["success"] === false)
+        // {
+        //     // CRIA CLIENTE NO ASAAS E SETA NO BANCO
+        //     $criarCliente = $this->createClient($req->id_user);
             
-            return response()->json([
-                "success" => true,
-                "data" => $criarCliente
-            ]); 
-        }
-        else
-        {
-            return response()->json([
-                "success" => true,
-                "data" => $verIdAsaas
-            ]);
-            // PEGA CLIENTE REGISTRADO NO ASAAS
-            // $pegarClienteCriado = $this->getOneClient($verIdAsaas["id_asaas"]);
-        }
+        //     return response()->json([
+        //         "success" => true,
+        //         "data" => $criarCliente
+        //     ]); 
+        // }
+        // else
+        // {
+        //     return response()->json([
+        //         "success" => true,
+        //         "data" => $verIdAsaas
+        //     ]);
+        //     // PEGA CLIENTE REGISTRADO NO ASAAS
+        //     // $pegarClienteCriado = $this->getOneClient($verIdAsaas["id_asaas"]);
+        // }
         
     }
 
