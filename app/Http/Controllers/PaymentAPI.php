@@ -84,7 +84,7 @@ class PaymentAPI extends Controller
         }
         
 
-        // return $registerID ? $registerID : "";
+        return $registerID ? $registerID : "";
     }
 
 
