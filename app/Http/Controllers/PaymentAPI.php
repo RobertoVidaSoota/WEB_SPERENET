@@ -51,9 +51,12 @@ class PaymentAPI extends Controller
     public function createClient($id_user)
     {
 
-        $user = User::where("id", $id_user);
-        $infoPessoais = InfoPessoais::where("fk_id_usuario", $id_user);
-        $endereco = Endereco::where("fk_id_usuario", $id_user);
+        $user = User::where("id", $id_user)
+            ->get();
+        $infoPessoais = InfoPessoais::where("fk_id_usuario", $id_user)
+            ->get();
+        $endereco = Endereco::where("fk_id_usuario", $id_user)
+            ->get();;
 
         $data = [
             "name" => $infoPessoais[0]->nome_usuario,
@@ -104,7 +107,7 @@ class PaymentAPI extends Controller
         $id = User::where("id", $id_user)
             ->get();
 
-        if(!$id && $id->id_asaas == "")
+        if($id && $id[0]->id_asaas == "")
         {
             return [
                 "success" => false

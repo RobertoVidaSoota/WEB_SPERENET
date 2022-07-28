@@ -151,6 +151,14 @@ class Checkout extends Controller
                     "success" => false
                 ]);
             }
+
+            $carrinho = Carrinho::create([
+                "quantidade_produto" => 1,
+                "fk_id_produto" => $id_produto,
+                "fk_id_compras" => $carrinhoCheck[0]->id
+            ]);
+
+            $idCompra = $carrinhoCheck[0]->id;
         }
         else
         {
@@ -159,21 +167,26 @@ class Checkout extends Controller
                 "status" => "carrinho",
                 "fk_id_usuario" => $user_id,
             ]);
+
+            $compras = Compras::where("status", "carrinho")
+            ->where("fk_id_usuario", $user_id)
+            ->get();
+
+            $carrinho = Carrinho::create([
+                "quantidade_produto" => 1,
+                "fk_id_produto" => $id_produto,
+                "fk_id_compras" => $compras[0]->id
+            ]);
+
+            $idCompra = $compras[0]->id;
         }
-        
 
-        $carrinho = Carrinho::create([
-            "quantidade_produto" => 1,
-            "fk_id_produto" => $id_produto,
-            "fk_id_compras" => $carrinhoCheck[0]->id
-        ]);
-
-        if($carrinhoCheck && $carrinho)
+        if($carrinhoCheck || $carrinho)
         {
             return response()->json([
                 "msg" => "Deu certo",
                 "success" => true,
-                "id_compra" => $carrinhoCheck[0]->id
+                "id_compra" => $idCompra
             ]);
         }
         else
