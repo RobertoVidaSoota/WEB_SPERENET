@@ -83,7 +83,8 @@ class PaymentAPI extends Controller
                 else
                 {
                     return response()->json([
-                        "success" => false
+                        "success" => false,
+                        "data" => $response
                     ]);
                 }
                 
