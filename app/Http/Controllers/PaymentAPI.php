@@ -49,7 +49,7 @@ class PaymentAPI extends Controller
                 "observations" => ""
                 ];
 
-            // $data = json_encode($data);
+            $data = json_encode($data);
             
             if($user && $infoPessoais && $endereco)
             {
@@ -70,6 +70,7 @@ class PaymentAPI extends Controller
                 ]);
 
                 $response = curl_exec($curl);
+                $response = json_decode($response);
 
                 curl_close($curl);
 
