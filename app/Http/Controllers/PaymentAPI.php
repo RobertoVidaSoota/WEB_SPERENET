@@ -49,43 +49,43 @@ class PaymentAPI extends Controller
                 "observations" => ""
                 ];
 
-            $data = json_encode($data);
+            // $data = json_encode($data);
             
             if($user && $infoPessoais && $endereco)
             {
-                $curl = curl_init();
+                // $curl = curl_init();
 
-                $headers = [
-                    "Content-Type" => "application/json",
-                    "access_token" => env('ASAAS_TOKEN')
-                ];
+                // $headers = [
+                //     "Content-Type" => "application/json",
+                //     "access_token" => env('ASAAS_TOKEN')
+                // ];
 
                 
-                curl_setopt_array($curl, [
-                    CURLOPT_URL => $this->asaasURL.'customers',
-                    CURLOPT_CUSTOMREQUEST => 'POST',
-                    CURLOPT_RETURNTRANSFER => true,
-                    CURLOPT_HTTPHEADER => $headers,
-                    CURLOPT_POSTFIELDS => $data
-                ]);
+                // curl_setopt_array($curl, [
+                //     CURLOPT_URL => $this->asaasURL.'customers',
+                //     CURLOPT_CUSTOMREQUEST => 'POST',
+                //     CURLOPT_RETURNTRANSFER => true,
+                //     CURLOPT_HTTPHEADER => $headers,
+                //     CURLOPT_POSTFIELDS => $data
+                // ]);
 
-                $response = curl_exec($curl);
-                $response = json_decode($response);
+                // $response = curl_exec($curl);
+                // $response = json_decode($response);
 
-                curl_close($curl);
+                // curl_close($curl);
 
-                if($response)
+                if($data)
                 {
                     return response()->json([
                         "success" => true,
-                        "data" => $response
+                        "data" => $data
                     ]);
                 }
                 else
                 {
                     return response()->json([
                         "success" => false,
-                        "data" => $response
+                        "data" => $data
                     ]);
                 }
                 
