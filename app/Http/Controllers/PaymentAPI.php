@@ -48,44 +48,49 @@ class PaymentAPI extends Controller
                 "stateInscription" => "",
                 "observations" => ""
                 ];
-
-            // $data = json_encode($data);
             
+            $data = json_encode($data);
+
             if($user && $infoPessoais && $endereco)
             {
-                // $curl = curl_init();
+                $curl = curl_init();
 
-                // $headers = [
-                //     "Content-Type" => "application/json",
-                //     "access_token" => env('ASAAS_TOKEN')
-                // ];
-
+                $headers = [
+                    "Content-Type" => "application/json",
+                    "Content-Length" => strlen($data),
+                    "access_token" => env('ASAAS_TOKEN')
+                ];
                 
-                // curl_setopt_array($curl, [
-                //     CURLOPT_URL => $this->asaasURL.'customers',
-                //     CURLOPT_CUSTOMREQUEST => 'POST',
-                //     CURLOPT_RETURNTRANSFER => true,
-                //     CURLOPT_HTTPHEADER => $headers,
-                //     CURLOPT_POSTFIELDS => $data
-                // ]);
+                curl_setopt_array($curl, [
+                    // CURLOPT_URL => $this->asaasURL.'customers',
+                    CURLOPT_URL => 'https://pokeapi.co/api/v2/pokemon/ditto',
+                    CURLOPT_CUSTOMREQUEST => 'POST',
+                    CURLOPT_POST => true,
+                    CURLOPT_RETURNTRANSFER => true,
+                    CURLOPT_SSL_VERIFYPEER => false,
+                    CURLINFO_HEADER_OUT => true,
+                    CURLOPT_HTTPHEADER => $headers,
+                    CURLOPT_POSTFIELDS => $data
+                ]);
 
-                // $response = curl_exec($curl);
-                // $response = json_decode($response);
+                $response = curl_exec($curl);
+                curl_close($curl);
 
-                // curl_close($curl);
+                $response = json_decode($response, true);
 
-                if($data)
+                if($response)
                 {
                     return response()->json([
                         "success" => true,
-                        "data" => $data
+                        "data" => $response,
                     ]);
                 }
                 else
                 {
                     return response()->json([
                         "success" => false,
-                        "data" => $data
+                        "data" => $response,
+                        "curl error" => curl_error($curl)
                     ]);
                 }
                 
