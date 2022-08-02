@@ -49,7 +49,7 @@ class Checkout extends Controller
     }
 
 
-    // FINALIZAR PAGAMENTO (NO CALL)
+    // FINALIZAR PAGAMENTO COM CARTÃO
     public function finalPayment(Request $req)
     {
         $idPedido = rand(2, 999);
@@ -113,11 +113,15 @@ class Checkout extends Controller
 
         if($result)
         {
-            echo "TUDO CERTO";
+            return response()->json([
+                "success" => true
+            ]);
         }
         else
         {
-            echo "DEU ERRADO";
+            return response()->json([
+                "success" => false
+            ]);
         }
     }
     
@@ -128,7 +132,7 @@ class Checkout extends Controller
     // CARINHO DE COMPRA
     // -----------------------------------
     
-    // ADICIONAR NO CARRINHO
+    // ADICIONAR PRODUTO NO CARRINHO
     public function postAddCart(Request $req)
     {
         $user_id = $req->user_id;
@@ -201,7 +205,7 @@ class Checkout extends Controller
 
 
 
-    // VERIFICAR CARRINHO
+    // VERIFICAR SE O PRODUTO ESTÁ NO CARRINHO
     public function postVerifyProdChart(Request $req)
     {
         $id_produto = $req->id_produto;
@@ -425,7 +429,7 @@ class Checkout extends Controller
 
 
 
-    // MÉTODO DE PAGAMENTO(TESTAR COM APP)
+    // ESCOLHER MÉTODO DE PAGAMENTO
     public function postPayMethod(Request $req)
     {
         $metodo = $req->metodo;

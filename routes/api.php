@@ -180,9 +180,9 @@ Route::post("/post_pay_method", [
 
 
 // PAGAR COM ASAAS
-Route::post("/post_pay_transaction", [
-    PaymentAPI::class, "postPayTransaction"
-]);//
+// Route::post("/post_pay_transaction", [
+//     PaymentAPI::class, "postPayTransaction"
+// ]);//
 
 
 
@@ -192,7 +192,8 @@ Route::post("/post_pay_transaction", [
 //
 // COM PAGSEGURO
 // 
-/*/ PEGAR SESSÃO DA TRANSAÇÃO
+
+// PEGAR SESSÃO DA TRANSAÇÃO
 Route::get("/get_session_pagseguro", [
     Checkout::class, "getSessionPagseguro"
 ]);//
@@ -200,5 +201,5 @@ Route::get("/get_session_pagseguro", [
 // CONFIRMAR PAGAMENTO
 Route::post("/post_final_payment", [
     Checkout::class, "finalPayment"
-]);/*/
+]);
 
