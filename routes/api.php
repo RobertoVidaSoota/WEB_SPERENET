@@ -198,8 +198,12 @@ Route::get("/get_session_pagseguro", [
     Checkout::class, "getSessionPagseguro"
 ]);//
 
-// CONFIRMAR PAGAMENTO
+// CONFIRMAR PAGAMENTO COM CARTÃO
 Route::post("/post_final_payment", [
     Checkout::class, "finalPayment"
+]);
+
+Route::post("/post_boleto_payment", [
+    Checkout::class, "boletoPayment"
 ]);
 

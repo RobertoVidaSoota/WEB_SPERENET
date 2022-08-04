@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Carrinho;
 use App\Models\Compras;
 use App\Models\Endereco;
+use App\Models\InfoPessoais;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use PagSeguro\Configuration\Configure;
@@ -49,73 +51,114 @@ class Checkout extends Controller
     }
 
 
+
+
     // FINALIZAR PAGAMENTO COM CARTÃO
     public function finalPayment(Request $req)
     {
-        $idPedido = rand(2, 999);
+        // DADOS DO USUARIO
+        $user = User::where("id", $req->id_user)
+                ->get();
+        $infoPessoais = InfoPessoais::where("fk_id_usuario", $req->id_user)
+            ->get();
+        $endereco = Endereco::where("fk_id_usuario", $req->id_user)
+            ->get();
+        
+        $idPedido = $req->id_compra;
+        $nomeDividido = explode(" ", $req->name);
+        $primeiroNome = $nomeDividido[0];
+        $segundoNome = $nomeDividido[1];
+        $telefones = explode(" ", $infoPessoais[0]->telefone);
+        $ddd = $telefones[0];
+        $telefone = $telefones[1];
+        $cpf = $req->cpf;
+        $niver = date_format(date_create($infoPessoais[0]->nascimento), "d/m/Y");
+        $cep = explode("-", $endereco[0]->cep);
+        $cep1 = $cep[0];
+        $cep2 = $cep[1];
+        $cep = $cep1.$cep2;
 
+        // INICIAR A TRANSAÇÃO COM O PAGSEGURO
         $credCard = new \PagSeguro\Domains\Requests\DirectPayment\CreditCard();
         $credCard->setReference("PED_".$idPedido);
         $credCard->setCurrency("BRL");
 
-        $credCard->addItems()->withParameters(
-            $idPedido.$req->items,
-            $req->items, // <--- NOME DO PEDIDO
-            1,  // <--- COPIAS
-            // VALOR DE CADA PRODUTO NO CARRINHO
-            number_format($req->total, 2, ".", "")
-        );
+        for($posicao = 0; $posicao < count($req->items); $posicao++)
+        {
+            $credCard->addItems()->withParameters(
+                $idPedido."_".date("d_m_Y"),
+                $req->items[$posicao]["nome_produto"],
+                $req->items[$posicao]["quantidade_produto"],
+                number_format($req->items[$posicao]["preco_float"], 2, ".", "")
+            );
+        }
 
-        // $user = $req->user_name::user(); 
-
-        $credCard->setSender()->setName("Roberto". " ". "Carlos");
-        $credCard->setSender()->setEmail(env("PAGSEGURO_EMAIL_SD"));
+        // INFORMAÇÕES DO COMPRADOR (COLOCAR EMAIL NORMAL EM PRODUÇÃO)
+        $credCard->setSender()->setName($primeiroNome." ".$segundoNome);
+        $credCard->setSender()->setEmail($primeiroNome."@sandbox.pagseguro.com.br");
         $credCard->setSender()->setHash($req->hash);
-        $credCard->setSender()->setPhone()->withParameters(71, 87728789);
-        $credCard->setSender()->setDocument()->withParameters("CPF", "11111111111");
+        $credCard->setSender()->setPhone()->withParameters($ddd, $telefone);
+        $credCard->setSender()->setDocument()->withParameters("CPF", $cpf);
 
+        // COMPRADOR
         $credCard->setShipping()->setAddress()->withParameters(
-            'Av Optuco',
-            '1234',
-            'Vale do Silêncio',
-            '22775559',
-            'Goiânia',
-            'GO',
+            $endereco[0]->rua,
+            $endereco[0]->numero,
+            $endereco[0]->bairro,
+            $cep,
+            $endereco[0]->cidade,
+            $endereco[0]->uf,
             'BRA',
-            'terreo'
+            ''
         );
+        // ENTREAGA
         $credCard->setBilling()->setAddress()->withParameters(
-            'Av Optuco',
-            '1234',
-            'Vale do Silêncio',
-            '22775559',
-            'Goiânia',
-            'GO',
+            $endereco[0]->rua,
+            $endereco[0]->numero,
+            $endereco[0]->bairro,
+            $cep,
+            $endereco[0]->cidade,
+            $endereco[0]->uf,
             'BRA',
-            'terreo'
+            ''
         );
         $credCard->setToken($req->token);
         $credCard->setInstallment()->withParameters(
-            // PARCELA ATUAL
-            $req->installments,
-            // VALOR DA PARCELAS
-            number_format($req->total, 2, ".", ""), 
-            false
+            $req->parcelas,
+            number_format($req->valorPorParcela, 2, ".", "")
         );
 
-        $credCard->setHolder()->setName("Roberto". " "."Carlos");
-        $credCard->setHolder()->setDocument()->withParameters("CPF", "11111111111");
-        $credCard->setHolder()->setBirthDate("03/01/1990");
-        $credCard->setHolder()->setPhone()->withParameters(71, 87728789);
+        // INFORMAÇÕES DO CARTÃO
+        $credCard->setHolder()->setName($primeiroNome." ".$segundoNome);
+        $credCard->setHolder()->setDocument()->withParameters("CPF", $cpf);
+        $credCard->setHolder()->setBirthDate($niver);
+        $credCard->setHolder()->setPhone()->withParameters($ddd, $telefone);
         $credCard->setMode("DEFAULT");
 
         $result = $credCard->register($this->getCrt());
 
         if($result)
         {
-            return response()->json([
-                "success" => true
-            ]);
+            $status = Compras::where("id", $idPedido)
+                ->update([
+                    "status" => "Aguardando Pagamento",
+                    "data_hora_compra" => date("Y-m-d H:i:s"),
+                    "local_atual" => "No depósito"
+                ]);
+
+            if($status)
+            {
+                return response()->json([
+                    "success" => true,
+                    "result" => $result
+                ]);
+            }
+            else
+            {
+                return response()->json([
+                    "success" => false
+                ]);
+            }
         }
         else
         {
@@ -124,6 +167,110 @@ class Checkout extends Controller
             ]);
         }
     }
+
+
+
+
+    // FINALIZAR PAGAMENTO COM BOLETO
+    public function boletoPayment(Request $req)
+    {
+        // DADOS DO USUÁRIO
+        $user = User::where("id", $req->id_user)
+                ->get();
+        $infoPessoais = InfoPessoais::where("fk_id_usuario", $req->id_user)
+            ->get();
+        $endereco = Endereco::where("fk_id_usuario", $req->id_user)
+            ->get();
+        
+        $idPedido = $req->id_compra;
+        $nomeDividido = explode(" ", $req->name);
+        $primeiroNome = $nomeDividido[0];
+        $segundoNome = $nomeDividido[1];
+        $telefones = explode(" ", $infoPessoais[0]->telefone);
+        $ddd = $telefones[0];
+        $telefone = $telefones[1];
+        $cpf = $infoPessoais[0]->cpf;
+        $niver = date_format(date_create($infoPessoais[0]->nascimento), "d/m/Y");
+        $cep = explode("-", $endereco[0]->cep);
+        $cep1 = $cep[0];
+        $cep2 = $cep[1];
+        $cep = $cep1.$cep2;
+
+        // INICIAR TRANSAÇÃO
+        $boleto = new \PagSeguro\Domains\Requests\DirectPayment\Boleto;
+
+        $boleto->setMode('DEFAULT');
+        $boleto->setCurrency("BRL");
+
+        // PRODUTOS DO CARRINHO
+        for($posicao = 0; $posicao < count($req->items); $posicao++)
+        {
+            $boleto->addItems()->withParameters(
+                $idPedido."_".date("d_m_Y"),
+                $req->items[$posicao]["nome_produto"],
+                $req->items[$posicao]["quantidade_produto"],
+                number_format($req->items[$posicao]["preco_float"], 2, ".", "")
+            );
+        }
+
+        $boleto->setReference($idPedido."_".date("Y.m.d")."_boleto");
+
+        $boleto->setExtraAmount(0.00);
+
+        // DADOS DO COMPRADOR
+        $boleto->setSender()->setName($primeiroNome.' '.$segundoNome);
+        $boleto->setSender()->setEmail($primeiroNome.'@sandbox.pagseguro.com.br');
+        $boleto->setSender()->setPhone()->withParameters($ddd, $telefone);
+        $boleto->setSender()->setDocument()->withParameters('CPF', env('CPF_PS'));
+        $boleto->setSender()->setHash($req->hash);
+
+        // ENDEREÇO DO COMPRADOR
+        $boleto->setShipping()->setAddress()->withParameters(
+            $endereco[0]->rua,
+            $endereco[0]->numero,
+            $endereco[0]->bairro,
+            $cep,
+            $endereco[0]->cidade,
+            $endereco[0]->uf,
+            'BRA',
+            ''
+        );
+
+        $result = $boleto->register($this->getCrt());
+
+
+        if($result)
+        {
+            $status = Compras::where("id", $idPedido)
+                ->update([
+                    "status" => "Aguardando Pagamento",
+                    "data_hora_compra" => date("Y-m-d H:i:s"),
+                    "local_atual" => "No depósito"
+                ]);
+
+            if($status)
+            {
+                return response()->json([
+                    "success" => true,
+                    "result" => $result
+                ]);
+            }
+            else
+            {
+                return response()->json([
+                    "success" => false
+                ]);
+            }
+        }
+        else
+        {
+            return response()->json([
+                "success" => false
+            ]);
+        }
+    } 
+
+
     
 
 
@@ -354,7 +501,7 @@ class Checkout extends Controller
     {
         $user_id = $req->id_user;
 
-        $purchases = Compras::where("fk_id_usuario", "=", $user_id)
+        $purchases = Compras::where("fk_id_usuario", "=", $user_id)->orderBy("id", "desc")
             ->get();    
 
         for ($i = 0; $i < count($purchases); $i++)
