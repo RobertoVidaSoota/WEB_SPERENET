@@ -183,14 +183,13 @@ class Checkout extends Controller
             ->get();
         
         $idPedido = $req->id_compra;
-        $nomeDividido = explode(" ", $req->name);
+        $nomeDividido = explode(" ", $infoPessoais[0]->nome_usuario);
         $primeiroNome = $nomeDividido[0];
         $segundoNome = $nomeDividido[1];
         $telefones = explode(" ", $infoPessoais[0]->telefone);
         $ddd = $telefones[0];
         $telefone = $telefones[1];
         $cpf = $infoPessoais[0]->cpf;
-        $niver = date_format(date_create($infoPessoais[0]->nascimento), "d/m/Y");
         $cep = explode("-", $endereco[0]->cep);
         $cep1 = $cep[0];
         $cep2 = $cep[1];
