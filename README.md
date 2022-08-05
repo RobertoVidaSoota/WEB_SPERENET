@@ -4,8 +4,7 @@
     // PEGAR NOVOS PRODUTOS
     public function getNewProducts()
     {
-        $products = DB::select("
-        SELECT produto.*, format(avg(estrelas), 1) as media_estrelas,
+        $products = DB::select("SELECT produto.*, format(avg(estrelas), 1) as media_estrelas,
         count(comentarios.fk_id_produto) as quantidade_comentarios
         FROM produto 
         JOIN comentarios
@@ -13,8 +12,7 @@
         GROUP BY produto.id, nome_produto, link_imagem, preco_produto,
         descricao, created_at, updated_at
         ORDER BY produto.created_at desc
-        LIMIT 8;
-        ");
+        LIMIT 8;");
         
         if($products)
         {
