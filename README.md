@@ -1,7 +1,7 @@
 # API DE E-COMMERCE PARA COMPUTADORES
 
-`
-// PEGAR NOVOS PRODUTOS
+```php
+    // PEGAR NOVOS PRODUTOS
     public function getNewProducts()
     {
         $products = DB::select("
@@ -29,7 +29,7 @@
              ]);
         }
     }
-`
+```
 
 
 Esse projeto back-end irá fornecer uma trnsferência de dados com um aplicativo movel de um e-commerce para computadores e periféricos, garantindo o uso funcional do mesmo como autenticação e pesquisa de produtos.
@@ -45,9 +45,9 @@ O padrão REST é o padrão para construção da API pois dar facilidade de docu
 
 ### Exemplos
 
-- (Models)[https://github.com/RobertoVidaSoota/WEB_SPERENET/tree/master/app/Models]
-- (Views (rotas que se comunicão com as views))[https://github.com/RobertoVidaSoota/WEB_SPERENET/tree/master/routes]
-- (Controllers)[https://github.com/RobertoVidaSoota/WEB_SPERENET/tree/master/app/Http/Controllers]
+- [Models](https://github.com/RobertoVidaSoota/WEB_SPERENET/tree/master/app/Models)
+- [Views (rotas que se comunicão com as views)](https://github.com/RobertoVidaSoota/WEB_SPERENET/tree/master/routes)
+- [Controllers](https://github.com/RobertoVidaSoota/WEB_SPERENET/tree/master/app/Http/Controllers)
 
 ## Tecnologias:
 
@@ -56,4 +56,4 @@ O padrão REST é o padrão para construção da API pois dar facilidade de docu
 - PagSeguro sdk
 - google SMTP
 
-Se quiser conhecer minhas habilidades entre no meu (linkedin)[https://www.linkedin.com/in/roberto-carlos-677851174/].
+Se quiser conhecer minhas habilidades entre no meu [linkedin](https://www.linkedin.com/in/roberto-carlos-677851174/).
