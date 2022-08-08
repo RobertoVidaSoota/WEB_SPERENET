@@ -138,6 +138,7 @@ Route::post("/post_coments", [
 
 // ---------------- PAGAMENTO ----------------
 
+// LISTA DE COMPRAS
 Route::post("/post_purchases", [
     Checkout::class, "postPurchases"
 ]);//
