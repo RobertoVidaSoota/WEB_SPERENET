@@ -148,15 +148,16 @@ Route::post("/post_add_cart", [
     Checkout::class, "postAddCart"
 ]);//
 
+// REMOVER DO CARRINHO
+Route::post("/post_remove_chart", [
+    Checkout::class, "postRemoveChart"
+]);//
+
 // VERIFICAR CARRINHO
 Route::post("/post_verify_prod_chart", [
     Checkout::class, "postVerifyProdChart"
 ]);//
 
-// REMOVER DO CARRINHO
-Route::post("/post_remove_chart", [
-    Checkout::class, "postRemoveChart"
-]);//
 
 // MUDAR QUANTIDADE DO PRODUTO
 Route::post("/post_change_quantity_cart", [

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Mail\NovaSenha;
+use App\Models\Compras;
 use App\Models\Endereco;
 use App\Models\InfoPessoais;
 use App\Models\Notificacoes;
@@ -45,11 +46,16 @@ class AuthUser extends Controller
             ]
         );
 
-        if ($user && $token) 
+        $idCompra = Compras::where("status", "carrinho")
+            ->where("fk_id_usuario", $user[0]->id)
+            ->get();
+
+        if ($user && $token && $idCompra) 
         {
             $user[0]->password = "";
             return response()->json([
-                "user" => $user[0]
+                "user" => $user[0],
+                "id_compra" => $idCompra[0]->id
             ]);
         }
         else
