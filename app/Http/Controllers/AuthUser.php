@@ -50,13 +50,24 @@ class AuthUser extends Controller
             ->where("fk_id_usuario", $user[0]->id)
             ->get();
 
-        if ($user && $token && $idCompra) 
+        if($user && $token && $idCompra) 
         {
-            $user[0]->password = "";
-            return response()->json([
-                "user" => $user[0],
-                "id_compra" => $idCompra[0]->id
-            ]);
+            if(count($idCompra) > 0)
+            {
+                $user[0]->password = "";
+                return response()->json([
+                    "user" => $user[0],
+                    "id_compra" => $idCompra[0]->id
+                ]);
+            }
+            else
+            {
+                $user[0]->password = "";
+                return response()->json([
+                    "user" => $user[0],
+                    "id_compra" => 0
+                ]);
+            }
         }
         else
         {
