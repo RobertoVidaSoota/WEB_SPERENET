@@ -184,8 +184,9 @@ class Checkout extends Controller
         
         $idPedido = $req->id_compra;
         $nomeDividido = explode(" ", $infoPessoais[0]->nome_usuario);
-        $valorTotal = $req->amount;
+        $valorTotal = $req->total;
         $vencimento = strtotime("+2 day", strtotime(date("Y-m-d")));
+        $vencimento = date("Y-m-d", $vencimento);
         $primeiroNome = $nomeDividido[0];
         $segundoNome = $nomeDividido[1];
         $telefones = explode(" ", $infoPessoais[0]->telefone);
@@ -214,7 +215,7 @@ class Checkout extends Controller
                     "line_2" => "Via PagSeguro"
                 ],
                 "holder" => [
-                    "name" => $primeiroNome."".$segundoNome,
+                    "name" => $primeiroNome." ".$segundoNome,
                     "tax_id" => $cpf,
                     "email" => $primeiroNome.'@sandbox.pagseguro.com.br',
                     "address" => [
@@ -232,6 +233,11 @@ class Checkout extends Controller
             ],
             "notification_urls" => [
                 ""
+            ],
+            "metadata" => [
+                "Exemplo" => "Aceita qualquer informação",
+                "NotaFiscal" => $req->id_user."__"."PED-0000".$idPedido,
+                "idComprador" => $req->id_user
             ]
         ];
 
@@ -544,7 +550,9 @@ class Checkout extends Controller
     {
         $user_id = $req->id_user;
 
-        $purchases = Compras::where("fk_id_usuario", "=", $user_id)->orderBy("id", "desc")
+        $purchases = Compras::where("fk_id_usuario", "=", $user_id)
+            ->orderBy("id", "desc")
+            ->limit(5)
             ->get();    
 
         for ($i = 0; $i < count($purchases); $i++)
