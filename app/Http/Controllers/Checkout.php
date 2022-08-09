@@ -184,61 +184,103 @@ class Checkout extends Controller
         
         $idPedido = $req->id_compra;
         $nomeDividido = explode(" ", $infoPessoais[0]->nome_usuario);
+        $valorTotal = $req->amount;
+        $vencimento = strtotime("+2 day", strtotime(date("Y-m-d")));
         $primeiroNome = $nomeDividido[0];
         $segundoNome = $nomeDividido[1];
         $telefones = explode(" ", $infoPessoais[0]->telefone);
         $ddd = $telefones[0];
         $telefone = $telefones[1];
-        $cpf = $infoPessoais[0]->cpf;
+        // $cpf = $infoPessoais[0]->cpf;
+        $cpf = env('CPF_PS');
         $cep = explode("-", $endereco[0]->cep);
         $cep1 = $cep[0];
         $cep2 = $cep[1];
         $cep = $cep1.$cep2;
 
-        // INICIAR TRANSAÇÃO
-        $boleto = new \PagSeguro\Domains\Requests\DirectPayment\Boleto;
+        $result = [
+            "reference_id" => "PED-0000".$idPedido,
+            "description" => "Compra por boleto do produto na SPERENET",
+            "amount" => [
+              "value" => $valorTotal,
+              "currency" => "BRL"
+            ],
+            "payment_method" => [
+              "type" => "BOLETO",
+              "boleto" => [
+                "due_date" => $vencimento,
+                "instruction_lines" => [
+                    "line_1" => "Pagamento processado para DESC Fatura",
+                    "line_2" => "Via PagSeguro"
+                ],
+                "holder" => [
+                    "name" => $primeiroNome."".$segundoNome,
+                    "tax_id" => $cpf,
+                    "email" => $primeiroNome.'@sandbox.pagseguro.com.br',
+                    "address" => [
+                        "street" => $endereco[0]->rua,
+                        "number" => $endereco[0]->numero,
+                        "locality" => $endereco[0]->bairro,
+                        "city" => $endereco[0]->cidade,
+                        "region" => $endereco[0]->estado,
+                        "region_code" => $endereco[0]->uf,
+                        "country" => "Brasil",
+                        "postal_code" => $cep
+                  ]
+                ]
+              ]
+            ],
+            "notification_urls" => [
+                ""
+            ]
+        ];
 
-        $boleto->setMode('DEFAULT');
-        $boleto->setCurrency("BRL");
+        $token = env('PAGSEGURO_TOKEN');
 
-        // PRODUTOS DO CARRINHO
-        for($posicao = 0; $posicao < count($req->items); $posicao++)
-        {
-            $boleto->addItems()->withParameters(
-                $idPedido."_".date("d_m_Y"),
-                $req->items[$posicao]["nome_produto"],
-                $req->items[$posicao]["quantidade_produto"],
-                number_format($req->items[$posicao]["preco_float"], 2, ".", "")
-            );
-        }
+        // // INICIAR TRANSAÇÃO
+        // $boleto = new \PagSeguro\Domains\Requests\DirectPayment\Boleto;
 
-        $boleto->setReference($idPedido."_".date("Y.m.d")."_boleto");
+        // $boleto->setMode('DEFAULT');
+        // $boleto->setCurrency("BRL");
 
-        $boleto->setExtraAmount(0.00);
+        // // PRODUTOS DO CARRINHO
+        // for($posicao = 0; $posicao < count($req->items); $posicao++)
+        // {
+        //     $boleto->addItems()->withParameters(
+        //         $idPedido."_".date("d_m_Y"),
+        //         $req->items[$posicao]["nome_produto"],
+        //         $req->items[$posicao]["quantidade_produto"],
+        //         number_format($req->items[$posicao]["preco_float"], 2, ".", "")
+        //     );
+        // }
 
-        // DADOS DO COMPRADOR
-        $boleto->setSender()->setName($primeiroNome.' '.$segundoNome);
-        $boleto->setSender()->setEmail($primeiroNome.'@sandbox.pagseguro.com.br');
-        $boleto->setSender()->setPhone()->withParameters($ddd, $telefone);
-        $boleto->setSender()->setDocument()->withParameters('CPF', env('CPF_PS'));
-        $boleto->setSender()->setHash($req->hash);
+        // $boleto->setReference($idPedido."_".date("Y.m.d")."_boleto");
 
-        // ENDEREÇO DO COMPRADOR
-        $boleto->setShipping()->setAddress()->withParameters(
-            $endereco[0]->rua,
-            $endereco[0]->numero,
-            $endereco[0]->bairro,
-            $cep,
-            $endereco[0]->cidade,
-            $endereco[0]->uf,
-            'BRA',
-            ''
-        );
+        // $boleto->setExtraAmount(0.00);
 
-        $result = $boleto->register($this->getCrt());
+        // // DADOS DO COMPRADOR
+        // $boleto->setSender()->setName($primeiroNome.' '.$segundoNome);
+        // $boleto->setSender()->setEmail($primeiroNome.'@sandbox.pagseguro.com.br');
+        // $boleto->setSender()->setPhone()->withParameters($ddd, $telefone);
+        // $boleto->setSender()->setDocument()->withParameters('CPF', env('CPF_PS'));
+        // $boleto->setSender()->setHash($req->hash);
+
+        // // ENDEREÇO DO COMPRADOR
+        // $boleto->setShipping()->setAddress()->withParameters(
+        //     $endereco[0]->rua,
+        //     $endereco[0]->numero,
+        //     $endereco[0]->bairro,
+        //     $cep,
+        //     $endereco[0]->cidade,
+        //     $endereco[0]->uf,
+        //     'BRA',
+        //     ''
+        // );
+
+        // $result = $boleto->register($this->getCrt());
 
 
-        if($result)
+        if($result && $token)
         {
             $status = Compras::where("id", $idPedido)
                 ->update([
@@ -251,7 +293,8 @@ class Checkout extends Controller
             {
                 return response()->json([
                     "success" => true,
-                    "result" => $result
+                    "result" => $result,
+                    "token" => $token
                 ]);
             }
             else
