@@ -28,6 +28,6 @@ use Inertia\Inertia;
 //     return Inertia::render('Dashboard');
 // })->name('dashboard');
 
-// Route::get('/pera', function () {
-//     echo bcrypt('roberto123');
-// });
+Route::get('/', function () {
+    dd("sperenet is online");
+});
