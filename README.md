@@ -55,3 +55,7 @@ O padrão REST é o padrão para construção da API pois dar facilidade de docu
 - google SMTP
 
 Se quiser conhecer minhas habilidades entre no meu [linkedin](https://www.linkedin.com/in/roberto-carlos-677851174/).
+
+O projeto também roda em um ambiente gitpod.
+
+[![Gitpod Ready-to-Code](https://img.shields.io/badge/Gitpod-Ready--to--Code-blue?logo=gitpod)](https://gitpod.io/#https://github.com/<org-name>/<repo-name>) 
