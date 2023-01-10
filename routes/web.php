@@ -29,5 +29,5 @@ use Inertia\Inertia;
 // })->name('dashboard');
 
 Route::get('/', function () {
-    dd("sperenet is online");
+    echo "sperenet is online";
 });
