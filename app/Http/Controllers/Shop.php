@@ -333,21 +333,14 @@ class Shop extends Controller
 
 
 
-    // PEGAR UM PRODUTO PARA A PÁGINA
+    // SELECIONAR INFORMAÇÕES DE UM PRODUTO PARA MOSTRAR NUMA PÁGINA
     public function postPageProduct(Request $req)
     {
         $product_id = $req->product_id;
-
-        $specifications = Especificacoes::where(
-            "fk_id_produto", $product_id
-        )
-        ->get();
-
-        $coments = DB::table("comentarios")
-            ->join("users", "users.id", "=", "comentarios.fk_id_usuario")
+        $specifications = Especificacoes::where("fk_id_produto", $product_id)->get();
+        $coments = DB::table("comentarios")->join("users", "users.id", "=", "comentarios.fk_id_usuario")
             ->join("info_pessoais", "info_pessoais.fk_id_usuario", "=", 
-            "comentarios.fk_id_usuario")
-            ->select("users.id", "users.name", "users.profile_photo_path", 
+            "comentarios.fk_id_usuario")->select("users.id", "users.name", "users.profile_photo_path", 
                 "comentarios.estrelas", "comentarios.texto_comentario", "info_pessoais.nome_usuario",  
             )->orderBy("comentarios.id", "desc")
             ->where("comentarios.fk_id_produto", "=", $product_id)
