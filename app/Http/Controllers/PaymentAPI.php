@@ -18,6 +18,7 @@ class PaymentAPI extends Controller
         $id_user = $req->id_user;
         // PEGA DO BANCO DE DADOS
         $verIdAsaas = $this->getIdClient($req->id_user);
+        return $verIdAsaas;
 
         if($verIdAsaas["success"] === false)
         {
@@ -62,8 +63,7 @@ class PaymentAPI extends Controller
                 ];
                 
                 curl_setopt_array($curl, [
-                    // CURLOPT_URL => $this->asaasURL.'customers',
-                    CURLOPT_URL => 'https://pokeapi.co/api/v2/pokemon/ditto',
+                    CURLOPT_URL => $this->asaasURL.'customers',
                     CURLOPT_CUSTOMREQUEST => 'POST',
                     CURLOPT_POST => true,
                     CURLOPT_RETURNTRANSFER => true,
@@ -173,7 +173,7 @@ class PaymentAPI extends Controller
 
 
 
-    // VERIFICAR O ID ASSAS DO USUÁRIO
+    // VERIFICAR O ID ASSAS DO USUÁRIO NO BANCO
     public function getIdClient($id_user)
     {
         $id = User::where("id", $id_user)
