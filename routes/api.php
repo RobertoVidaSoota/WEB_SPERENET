@@ -182,9 +182,9 @@ Route::post("/post_pay_method", [
 
 
 // PAGAR COM ASAAS
-// Route::post("/post_pay_transaction", [
-//     PaymentAPI::class, "postPayTransaction"
-// ]);//
+Route::post("/post_pay_transaction", [
+    PaymentAPI::class, "postPayTransaction"
+]);//
 
 
 

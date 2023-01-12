@@ -58,7 +58,6 @@ class PaymentAPI extends Controller
 
                 $headers = [
                     "Content-Type" => "application/json",
-                    "Content-Length" => strlen($data),
                     "access_token" => env('ASAAS_TOKEN')
                 ];
                 
@@ -109,6 +108,7 @@ class PaymentAPI extends Controller
             ]);
             // PEGA CLIENTE REGISTRADO NO ASAAS
             // $pegarClienteCriado = $this->getOneClient($verIdAsaas["id_asaas"]);
+
         }
         
     }

@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -23,14 +24,14 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        \URL::forceRootUrl(\Config::get('app.url'));
-        if (\Str::contains(\Config::get('app.url'), 'https://')) {
-            \URL::forceScheme('https');
-        }
+        // URL::forceRootUrl(\Config::get('app.url'));
+        // if (\Str::contains(\Config::get('app.url'), 'https://')) {
+        //     URL::forceScheme('https');
+        // }
         
         if($this->app->environment('production'))
         {
-            \URL::forceScheme("https");
+            URL::forceScheme("https");
         }
     }
 }
