@@ -21,7 +21,7 @@ class PaymentAPI extends Controller
 
         if($verIdAsaas["success"] === false)
         {
-            // CRIA CLIENTE NO ASAAS E SETA NO BANCO
+            // CRIA CLIENTE NO ASAAS E SETA NO BANCO (erro 500)
             // $criarCliente = $this->createClient($req->id_user);
             $user = User::where("id", $id_user)
                 ->get();
@@ -56,8 +56,8 @@ class PaymentAPI extends Controller
                 $curl = curl_init();
 
                 $headers = [
-                    "Content-Type" => "application/json",
-                    "access_token" => env('ASAAS_TOKEN')
+                    "Content-Type: application/json",
+                    "access_token:".env('ASAAS_TOKEN')
                 ];
                 
                 curl_setopt_array($curl, [
