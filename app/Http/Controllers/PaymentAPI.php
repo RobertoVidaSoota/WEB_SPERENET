@@ -18,7 +18,6 @@ class PaymentAPI extends Controller
         $id_user = $req->id_user;
         // PEGA DO BANCO DE DADOS
         $verIdAsaas = $this->getIdClient($req->id_user);
-        return $verIdAsaas;
 
         if($verIdAsaas["success"] === false)
         {
