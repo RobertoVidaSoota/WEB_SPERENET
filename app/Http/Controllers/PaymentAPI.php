@@ -16,26 +16,45 @@ class PaymentAPI extends Controller
     public function postPayTransaction(Request $req)
     {
         $id_user = $req->id_user;
-        // PEGA DO BANCO DE DADOS
-        $verIdAsaas = $this->getIdClient($req->id_user);
+        $motedo = $req->metodo;
+        $id_compra = $req->id_compra;
+
+        // SALVAR MÉTODO DE PAGAMENTO NO BANCO DE DADOS
+        $escolherMetodo = new Checkout();
+        $escolherMetodo->postPayMethod($motedo, $id_compra);
+        if($escolherMetodo["success"] === false)
+        {
+            return response()->json([
+                "success" => false,
+            ]);
+        }
+
+        // PEGA ID CLIENTE ASAAS DO BANCO DE DADOS
+        $verIdAsaas = $this->getIdClient($id_user);
 
         if($verIdAsaas["success"] === false)
         {
             // CRIA CLIENTE NO ASAAS E SETA NO BANCO
-            $criarCliente = $this->createClient($req->id_user);
-            return response()->json([
-                "success" => true,
-                "data" => $criarCliente
-            ]); 
+            $criarCliente = $this->createClient($id_user);
+            if($criarCliente["success"] === false)
+            {
+                return response()->json([
+                    "success" => false,
+                ]);
+            }
+            else
+            {
+                return response()->json([
+                    "success" => true,
+                ]);
+            }
         }
         else
         {
             return response()->json([
                 "success" => true,
-                "data" => $verIdAsaas
+                "data" => $verIdAsaas["id_asaas"]
             ]);
-            // PEGA CLIENTE REGISTRADO NO ASAAS (PASSO 2)
-            // $pegarClienteCriado = $this->getOneClient($verIdAsaas["id_asaas"]);
         }
         
     }
@@ -176,7 +195,7 @@ class PaymentAPI extends Controller
     // PAGAR COM CARTÃO
     public function payCard()
     {
-
+        // PEGA CLIENTE ID DO CLIENTE ASAAS NO BANCO DE DADOS (PASSO 3)
     }
 
 

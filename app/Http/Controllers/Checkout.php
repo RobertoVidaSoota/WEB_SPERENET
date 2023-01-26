@@ -628,11 +628,8 @@ class Checkout extends Controller
 
 
     // ESCOLHER MÉTODO DE PAGAMENTO
-    public function postPayMethod(Request $req)
+    public function postPayMethod($metodo, $id_compra)
     {
-        $metodo = $req->metodo;
-        $id_compra = $req->id_compra;
-
         $payment = Compras::where("id", $id_compra)
             ->update([
                 "metodo_pagamento" => $metodo
@@ -647,7 +644,7 @@ class Checkout extends Controller
         else
         {
             return response()->json([
-                "success" => true,
+                "success" => false,
                 "msg", "Erro no servidor"
             ]);
         }
