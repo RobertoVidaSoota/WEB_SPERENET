@@ -169,7 +169,10 @@ Route::post("/post_cart", [
     Checkout::class, "postCart"
 ]);//
 
-
+// INICIAR PAGAMENTO
+Route::post("/post_payment", [
+    Checkout::class, "postPayment"
+]);
 
 // PAGAR COM ASAAS
 Route::post("/post_pay_transaction", [
