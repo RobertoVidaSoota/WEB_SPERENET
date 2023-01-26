@@ -29,8 +29,12 @@ class PaymentAPI extends Controller
             ]);
         }
 
-        // PEGA ID CLIENTE ASAAS DO BANCO DE DADOS
+        // PEGA ID CLIENTE ASAAS DO BANCO DE DADOS $verIdAsaas["id_asaas"]
         $verIdAsaas = $this->getIdClient($id_user);
+        return response()->json([
+            "success" => true,
+            "data" => ""
+        ]);
 
         if($verIdAsaas["success"] === false)
         {
