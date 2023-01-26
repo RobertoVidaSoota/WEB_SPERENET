@@ -30,7 +30,7 @@ class PaymentAPI extends Controller
         // }
         return response()->json([
             "success" => true,
-            "data" => $escolherMetodoResponse["success"]
+            "data" => $escolherMetodoResponse->original["success"]
         ]);
 
         // PEGA ID CLIENTE ASAAS DO BANCO DE DADOS
