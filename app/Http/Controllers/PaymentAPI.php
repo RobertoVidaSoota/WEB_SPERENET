@@ -22,15 +22,15 @@ class PaymentAPI extends Controller
         // SALVAR MÉTODO DE PAGAMENTO NO BANCO DE DADOS $verIdAsaas["id_asaas"]
         $escolherMetodo = new Checkout();
         $escolherMetodoResponse = $escolherMetodo->postPayMethod($motedo, $id_compra);
-        if($escolherMetodoResponse["success"] === false)
-        {
-            return response()->json([
-                "success" => false,
-            ]);
-        }
+        // if($escolherMetodoResponse["success"] === false)
+        // {
+        //     return response()->json([
+        //         "success" => false,
+        //     ]);
+        // }
         return response()->json([
             "success" => true,
-            "data" => ""
+            "data" => $escolherMetodoResponse
         ]);
 
         // PEGA ID CLIENTE ASAAS DO BANCO DE DADOS
