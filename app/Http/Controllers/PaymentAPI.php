@@ -198,11 +198,26 @@ class PaymentAPI extends Controller
     {
         // PEGA CLIENTE ID DO CLIENTE ASAAS NO BANCO DE DADOS (PASSO 3)
         $verIdAsaas = $this->getIdClient($req->id_user);
+        $desc = "PEDIDO User_".$verIdAsaas["id_asaas"].":  \n \n";
+        for($i = 0; count($req->items); $i++)
+        {
+            if($i < 3)
+            {
+                $desc.="Produto: ".$req->items[$i]->nome_produto." \n";
+                $desc.="Preço: ".$req->items[$i]->preco_produto." \n";
+                $desc.="Quantidade: ".$req->items[$i]->quantidade_produto." \n";
+            }else if($i === 3){
+                $desc.="Tem mais produtos. confira na sua lista de compras da SPERENET. \n";
+            }
+        }
         $body = [
             'customer' => $verIdAsaas["id_asaas"],
             'billingType' => 'CREDIT_CARD',
-            'dueDate' => '2017-03-15',
+            'dueDate' => date('Y-m-d', strtotime(date('Y-m-d').' + 10 days')),
             'value' => $req->total,
+            'description' => $desc,
+            'installmentCount' => $req->valorPorParcela,
+            'installmentValue' => $req->parcelas,
             'creditCard' => [
               'holderName' => $req->name,
               'number' => $req->number,
@@ -216,12 +231,9 @@ class PaymentAPI extends Controller
               'cpfCnpj' => '24971563792',
               'postalCode' => '89223-005',
               'addressNumber' => '277',
-              'addressComplement' => null,
               'phone' => '4738010919',
-              'mobilePhone' => '47998781877'
             ],
-            'creditCardToken' => '76496073-536f-4835-80db-c45d00f33695',
-            'remoteIp' => '116.213.42.532'
+            'remoteIp' => $req->ip()
         ];
     }
 
