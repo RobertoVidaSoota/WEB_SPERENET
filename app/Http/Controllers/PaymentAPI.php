@@ -194,9 +194,35 @@ class PaymentAPI extends Controller
 
 
     // PAGAR COM CARTÃO
-    public function payCard()
+    public function payCard(Request $req)
     {
         // PEGA CLIENTE ID DO CLIENTE ASAAS NO BANCO DE DADOS (PASSO 3)
+        $verIdAsaas = $this->getIdClient($req->id_user);
+        $body = [
+            'customer' => $verIdAsaas["id_asaas"],
+            'billingType' => 'CREDIT_CARD',
+            'dueDate' => '2017-03-15',
+            'value' => $req->total,
+            'creditCard' => [
+              'holderName' => $req->name,
+              'number' => $req->number,
+              'expiryMonth' => $req->mouthExp,
+              'expiryYear' => $req->year,
+              'ccv' => $req->cvv
+            ],
+            'creditCardHolderInfo' => [
+              'name' => 'Marcelo Henrique Almeida',
+              'email' => 'marcelo.almeida@gmail.com',
+              'cpfCnpj' => '24971563792',
+              'postalCode' => '89223-005',
+              'addressNumber' => '277',
+              'addressComplement' => null,
+              'phone' => '4738010919',
+              'mobilePhone' => '47998781877'
+            ],
+            'creditCardToken' => '76496073-536f-4835-80db-c45d00f33695',
+            'remoteIp' => '116.213.42.532'
+        ];
     }
 
 
