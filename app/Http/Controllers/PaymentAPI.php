@@ -202,6 +202,7 @@ class PaymentAPI extends Controller
         $adress = Endereco::where("fk_id_usuario", $req->id_user)->get();
         $info = InfoPessoais::where("fk_id_usuario", $req->id_user)->get();
         $desc = "PEDIDO User_".$verIdAsaas["id_asaas"].":\n\n";
+        return "debug";
         for($i = 0; $i < count($req->items); $i++)
         {
             if($i < 3)
