@@ -202,7 +202,6 @@ class PaymentAPI extends Controller
         $adress = Endereco::where("fk_id_usuario", $req->id_user)->get();
         $info = InfoPessoais::where("fk_id_usuario", $req->id_user)->get();
         $desc = "PEDIDO User_".$verIdAsaas["id_asaas"].":\n\n";
-        return "debug";
         for($i = 0; $i < count($req->items); $i++)
         {
             if($i < 3)
@@ -214,6 +213,7 @@ class PaymentAPI extends Controller
                 $desc.="Tem mais produtos. confira na sua lista de compras da SPERENET.\n";
             }
         }
+        return "debug";
         $body = [
             'customer' => $verIdAsaas["id_asaas"],
             'billingType' => 'CREDIT_CARD',
