@@ -256,6 +256,7 @@ class PaymentAPI extends Controller
             {
                 return [
                     "success" => false,
+                    "data" => $pagar["data"]
                 ];
             }
         }
