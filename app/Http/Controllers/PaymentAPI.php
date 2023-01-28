@@ -198,6 +198,7 @@ class PaymentAPI extends Controller
     {
         // PEGA CLIENTE ID DO CLIENTE ASAAS NO BANCO DE DADOS
         $verIdAsaas = $this->getIdClient($req->id_user);
+        return "debug";
         $user = User::where("id", $req->id_user)->get();
         $adress = Endereco::where("id", $req->id_user)->get();
         $info = InfoPessoais::where("id", $req->id_user)->get();
@@ -240,7 +241,7 @@ class PaymentAPI extends Controller
         ];
 
         $body = json_encode($body);
-        return "debug";
+        
         // EFETUAR O PAGAMENTO
         if($body)
         {
