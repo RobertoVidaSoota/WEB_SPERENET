@@ -219,8 +219,8 @@ class PaymentAPI extends Controller
             'dueDate' => date('Y-m-d', strtotime(date('Y-m-d').' + 10 days')),
             'value' => $req->total,
             'description' => $desc,
-            'installmentCount' => $req->valorPorParcela,
-            'installmentValue' => $req->parcelas,
+            'installmentCount' => $req->parcelas,
+            'installmentValue' => $req->valorPorParcela,
             'creditCard' => [
               'holderName' => $req->name,
               'number' => $req->number,
