@@ -229,7 +229,7 @@ class PaymentAPI extends Controller
               'ccv' => $req->cvv
             ],
             'creditCardHolderInfo' => [
-              'name' => $user[0]->name,
+              'name' => $req->name,
               'email' => $user[0]->email,
               'cpfCnpj' => $info[0]->cpf,
               'postalCode' => $adress[0]->cep,
@@ -240,7 +240,7 @@ class PaymentAPI extends Controller
         ];
 
         $body = json_encode($body);
-
+        return "debug";
         // EFETUAR O PAGAMENTO
         if($body)
         {
