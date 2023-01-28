@@ -345,10 +345,20 @@ class PaymentAPI extends Controller
         $response = json_decode($response);
         curl_close($curl);
 
-       
-        return [
-            "success" => true,
-            "data" => $response
-        ];
+        if(!$response["erros"])
+        {
+            return [
+                "success" => true,
+                "data" => $response
+            ];
+        }
+        else
+        {
+            return [
+                "success" => false,
+                "data" => $response
+            ];
+        }
+        
     }
 }
