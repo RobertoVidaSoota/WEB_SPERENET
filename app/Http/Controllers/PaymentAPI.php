@@ -199,8 +199,8 @@ class PaymentAPI extends Controller
         // PEGA CLIENTE ID DO CLIENTE ASAAS NO BANCO DE DADOS
         $verIdAsaas = $this->getIdClient($req->id_user);
         $user = User::where("id", $req->id_user)->get();
-        $adress = Endereco::where("fk_id_users", $req->id_user)->get();
-        $info = InfoPessoais::where("fk_id_users", $req->id_user)->get();
+        $adress = Endereco::where("fk_id_usuario", $req->id_user)->get();
+        $info = InfoPessoais::where("fk_id_usuario", $req->id_user)->get();
         $desc = "PEDIDO User_".$verIdAsaas["id_asaas"].":  \n \n";
         for($i = 0; count($req->items); $i++)
         {
