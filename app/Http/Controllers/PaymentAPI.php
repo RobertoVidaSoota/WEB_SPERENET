@@ -196,8 +196,11 @@ class PaymentAPI extends Controller
     // PAGAR COM CARTÃO
     public function payCard(Request $req)
     {
-        // PEGA CLIENTE ID DO CLIENTE ASAAS NO BANCO DE DADOS (PASSO 3)
+        // PEGA CLIENTE ID DO CLIENTE ASAAS NO BANCO DE DADOS
         $verIdAsaas = $this->getIdClient($req->id_user);
+        $user = User::where("id", $req->id_user)->get();
+        $adress = Endereco::where("id", $req->id_user)->get();
+        $info = InfoPessoais::where("id", $req->id_user)->get();
         $desc = "PEDIDO User_".$verIdAsaas["id_asaas"].":  \n \n";
         for($i = 0; count($req->items); $i++)
         {
@@ -226,15 +229,36 @@ class PaymentAPI extends Controller
               'ccv' => $req->cvv
             ],
             'creditCardHolderInfo' => [
-              'name' => 'Marcelo Henrique Almeida',
-              'email' => 'marcelo.almeida@gmail.com',
-              'cpfCnpj' => '24971563792',
-              'postalCode' => '89223-005',
-              'addressNumber' => '277',
-              'phone' => '4738010919',
+              'name' => $user[0]->name,
+              'email' => $user[0]->email,
+              'cpfCnpj' => $info[0]->cpf,
+              'postalCode' => $adress[0]->cep,
+              'addressNumber' => $adress[0]->numero,
+              'phone' => $info[0]->telefone,
             ],
             'remoteIp' => $req->ip()
         ];
+
+        $body = json_encode($body);
+
+        // EFETUAR O PAGAMENTO
+        if($body)
+        {
+            $pagar = $this->requestAsaas("payments", $body, "POST");
+            if($pagar && $pagar["success"] === true)
+            {
+                return [
+                    "success" => true,
+                    "data" => $pagar["data"]
+                ];
+            }
+            else
+            {
+                return [
+                    "success" => false,
+                ];
+            }
+        }
     }
 
 
