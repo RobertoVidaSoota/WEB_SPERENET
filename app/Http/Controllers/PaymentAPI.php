@@ -213,6 +213,7 @@ class PaymentAPI extends Controller
                 $desc.="Tem mais produtos. confira na sua lista de compras da SPERENET.\n";
             }
         }
+        return "debug";
         $body = [
             'customer' => $verIdAsaas["id_asaas"],
             'billingType' => 'CREDIT_CARD',
