@@ -232,8 +232,8 @@ class PaymentAPI extends Controller
               'name' => $req->name,
               'email' => $user[0]->email,
               'cpfCnpj' => $info[0]->cpf,
-              'postalCode' => '89223-005',
-              'addressNumber' => "277",
+              'postalCode' => $req->cep,
+              'addressNumber' => $req->numero_endereco,
               'phone' => $info[0]->telefone,
             ],
             'remoteIp' => $req->ip()
@@ -246,12 +246,12 @@ class PaymentAPI extends Controller
             $pagar = $this->requestAsaas("payments", $body, "POST");
             if($pagar && $pagar["success"] === true)
             {
-                // $status = Compras::where("id", $req->id_compra)
-                // ->update([
-                //     "status" => "Aguardando Pagamento",
-                //     "data_hora_compra" => date("Y-m-d H:i:s"),
-                //     "local_atual" => "No depósito"
-                // ]);
+                $status = Compras::where("id", $req->id_compra)
+                ->update([
+                    "status" => "Aguardando Pagamento",
+                    "data_hora_compra" => date("Y-m-d H:i:s"),
+                    "local_atual" => "No depósito"
+                ]);
                 return [
                     "success" => true,
                     "data" => $pagar["data"]
