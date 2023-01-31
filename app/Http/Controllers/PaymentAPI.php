@@ -244,7 +244,6 @@ class PaymentAPI extends Controller
         // EFETUAR O PAGAMENTO
         if($body)
         {
-            return date('Y-m-d', strtotime(date('Y-m-d').' + 10 days'));
             $pagar = $this->requestAsaas("payments", $body, "POST");
             if($pagar && $pagar["success"] === true)
             {
@@ -346,7 +345,7 @@ class PaymentAPI extends Controller
         $response = json_decode($response);
         curl_close($curl);
 
-        if(!$response["erros"])
+        if(!$response["errors"])
         {
             return [
                 "success" => true,
