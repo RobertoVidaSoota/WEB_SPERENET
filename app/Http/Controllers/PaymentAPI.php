@@ -213,7 +213,6 @@ class PaymentAPI extends Controller
                 $desc.="Tem mais produtos. confira na sua lista de compras da SPERENET.\n";
             }
         }
-        return "debug";
         $body = [
             'customer' => $verIdAsaas["id_asaas"],
             'billingType' => 'CREDIT_CARD',
@@ -246,6 +245,7 @@ class PaymentAPI extends Controller
         if($body)
         {
             $pagar = $this->requestAsaas("payments", $body, "POST");
+            return "debug";
             if($pagar && $pagar["success"] === true)
             {
                 // $status = Compras::where("id", $req->id_compra)
