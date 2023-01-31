@@ -233,12 +233,11 @@ class PaymentAPI extends Controller
               'email' => $user[0]->email,
               'cpfCnpj' => $info[0]->cpf,
               'postalCode' => $adress[0]->cep,
-              'addressNumber' => $adress[0]->numero,
+              'addressNumber' => "".$adress[0]->numero."",
               'phone' => $info[0]->telefone,
             ],
             'remoteIp' => $req->ip()
         ];
-        return $body;
 
         $body = json_encode($body);
         
