@@ -238,7 +238,6 @@ class PaymentAPI extends Controller
             ],
             'remoteIp' => $req->ip()
         ];
-        return $body;
         $body = json_encode($body);
         
         // EFETUAR O PAGAMENTO
