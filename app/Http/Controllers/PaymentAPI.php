@@ -232,8 +232,8 @@ class PaymentAPI extends Controller
               'name' => $req->name,
               'email' => $user[0]->email,
               'cpfCnpj' => $info[0]->cpf,
-              'postalCode' => $adress[0]->cep,
-              'addressNumber' => "".$adress[0]->numero."",
+              'postalCode' => '89223-005',
+              'addressNumber' => "277",
               'phone' => $info[0]->telefone,
             ],
             'remoteIp' => $req->ip()
