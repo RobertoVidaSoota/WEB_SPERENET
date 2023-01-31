@@ -345,7 +345,7 @@ class PaymentAPI extends Controller
         $response = json_decode($response);
         curl_close($curl);
 
-        if(!$response["errors"])
+        if($response)
         {
             return [
                 "success" => true,
