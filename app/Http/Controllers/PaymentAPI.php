@@ -316,7 +316,7 @@ class PaymentAPI extends Controller
                 // ]);
                 return [
                     "success" => true,
-                    "data" => $pagar["data"]["id"],
+                    "data" => $pagar["data"],
                     // "barCode" => $codeBoleto["data"]
                 ];
             }
