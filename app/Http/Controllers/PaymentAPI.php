@@ -307,6 +307,7 @@ class PaymentAPI extends Controller
             $pagar = $this->requestAsaas("payments", $body, "POST");
             if($pagar && $pagar["success"] === true)
             {
+                // $codeBoleto = $this->requestAsaas("paymentspayments/{id}/identificationField", null, "GET");
                 // $status = Compras::where("id", $req->id_compra)
                 // ->update([
                 //     "status" => "Aguardando Pagamento",
@@ -315,7 +316,8 @@ class PaymentAPI extends Controller
                 // ]);
                 return [
                     "success" => true,
-                    "data" => $pagar["data"]
+                    "data" => $pagar["data"],
+                    // "barCode" => $codeBoleto["data"]
                 ];
             }
             else
