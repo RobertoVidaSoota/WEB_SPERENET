@@ -184,3 +184,7 @@ Route::post("/post_card_payment", [
     PaymentAPI::class, "payCard"
 ]);//
 
+// PAGEMENTO POR BOLETO
+Route::post("/post_boleto_payment", [
+    PaymentAPI::class, "payBoleto"
+]);//

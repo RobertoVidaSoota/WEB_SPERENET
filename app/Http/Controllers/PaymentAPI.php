@@ -270,9 +270,62 @@ class PaymentAPI extends Controller
 
 
     // PAGAR COM BOLETO
-    public function payBoleto()
+    public function payBoleto(Request $req)
     {
+        // PEGA CLIENTE ID DO CLIENTE ASAAS NO BANCO DE DADOS
+        $verIdAsaas = $this->getIdClient($req->id_user);
+        $user = User::where("id", $req->id_user)->get();
+        $adress = Endereco::where("fk_id_usuario", $req->id_user)->get();
+        $info = InfoPessoais::where("fk_id_usuario", $req->id_user)->get();
+        $desc = "PEDIDO User_".$verIdAsaas["id_asaas"].":\n\n";
+        for($i = 0; $i < count($req->items); $i++)
+        {
+            if($i < 3)
+            {
+                $desc.="Produto: ".$req->items[$i]["nome_produto"]."\n";
+                $desc.="Preço: ".$req->items[$i]["preco_produto"]."\n";
+                $desc.="Quantidade: ".$req->items[$i]["quantidade_produto"]."\n\n";
+            }else if($i === 3){
+                $desc.="Tem mais produtos. confira na sua lista de compras da SPERENET.\n";
+            }
+        }
+        $body = [
+            'customer' => $verIdAsaas["id_asaas"],
+            'billingType' => 'BOLETO',
+            'dueDate' => date('Y-m-d', strtotime(date('Y-m-d').' + 10 days')),
+            'value' => $req->total,
+            'description' => $desc,
+            'installmentCount' => $req->parcelas,
+            'installmentValue' => $req->valorPorParcela,
+            'postalService' => false
+        ];
+        $body = json_encode($body);
 
+        // EFETUAR O PAGAMENTO
+        if($body)
+        {
+            $pagar = $this->requestAsaas("payments", $body, "POST");
+            if($pagar && $pagar["success"] === true)
+            {
+                $status = Compras::where("id", $req->id_compra)
+                ->update([
+                    "status" => "Aguardando Pagamento",
+                    "data_hora_compra" => date("Y-m-d H:i:s"),
+                    "local_atual" => "No depósito"
+                ]);
+                return [
+                    "success" => true,
+                    "data" => $pagar["data"]
+                ];
+            }
+            else
+            {
+                return [
+                    "success" => false,
+                    "data" => $pagar["data"]
+                ];
+            }
+        }
     }
 
 
